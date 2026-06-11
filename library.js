@@ -5,8 +5,8 @@ const LATE_FEE_PER_DAY = 0.50;
 const MAX_BOOKS_PER_MEMBER = 5;
 
 const ERROR_MESSAGES = {
-    invalidString: value =>  `Expected a string value, but received : ${value}`,
-    invalidNumber: value =>  `Expected a integer value, but received : ${value}`,
+    invalidString: value =>  `Expected a string value: ${value}`,
+    invalidNumber: value =>  `Expected an integer value: ${value}`,
 };
 
 // Represents a single book in the library system
@@ -14,7 +14,7 @@ class Book {
     constructor(isbn, title, author, year, copies) {
         verifyString(isbn, title, author);
         verifyNumber(year, copies);
-        
+
         this.isbn = isbn;
         this.title = title;
         this.author = author;
@@ -43,14 +43,13 @@ class Book {
 
         // Prevent checkout if no copies are available
         if (!this.checkAvailability()) return false;
-
+        
         this.availableCopies--; // update inventory
 
         this.checkedOut.push(memberId); // track borrower
         return true;
     }
 }
-
 
 // Digital book class with inheritance problems
 class DigitalBook extends Book {
@@ -313,7 +312,7 @@ function verifyString(...strings){
 // Validates that all provided values are integers
 function verifyNumber(...numbers){
     numbers.forEach(number => {
-        if( typeof number !== 'number' && !Number.isInteger(number)  ){
+        if( typeof number !== 'number' || !Number.isInteger(number) || number < 0){
             throw new Error(ERROR_MESSAGES.invalidNumber(number));
         }
     });
