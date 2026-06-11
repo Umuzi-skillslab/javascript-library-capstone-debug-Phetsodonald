@@ -1,10 +1,8 @@
-// Library Management System - Starter Code with Complex Errors
 
-// Global state management (scoping issues)
-let books = [];  // Missing declaration
-let members = [];  // Wrong: should use let
+let books = [];
+let members = [];
 const LATE_FEE_PER_DAY = 0.50;
-const MAX_BOOKS_PER_MEMBER = 5;  // Missing const
+const MAX_BOOKS_PER_MEMBER = 5;
 
 // Book class with multiple issues
 class Book {
@@ -57,8 +55,8 @@ class Member {
     // Missing: method using destructuring
     
     canBorrow() {
-        // Wrong comparison operator
-        if (this.borrowedBooks.length = MAX_BOOKS_PER_MEMBER) {
+        
+        if (this.borrowedBooks.length === MAX_BOOKS_PER_MEMBER) {
             return false;
         }
         return true;
@@ -113,7 +111,7 @@ function searchBooksByCategory(bookList, category, index) {
     // Missing: undefined/null checks
     // Wrong comparison
     
-    if (bookList[index].category = category) {
+    if (bookList[index].category === category) {
         return [bookList[index]].concat(searchBooksByCategory(bookList, category, index + 1));
     }
     
@@ -126,7 +124,7 @@ function getBooksByAuthor(authorName) {
     
     // Should use filter method
     for (let i = 0; i < books.length; i++) {
-        if (books[i].author == authorName) {  // Should use ===
+        if (books[i].author === authorName) {
             result.push(books[i]);
         }
     }
@@ -199,7 +197,7 @@ function borrowBook(memberId, isbn) {
 function findMemberById(id) {
     // Should use find method
     for (let i = 0; i < members.length; i++) {
-        if (members[i].id = id) {  // Wrong operator
+        if (members[i].id === id) {
             return members[i];
         }
     }

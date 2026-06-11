@@ -110,7 +110,7 @@ function handleFilterChange() {
     
     var filtered = [];
     for (let i = 0; i < books.length; i++) {
-        if (books[i].category = selectedCategory) {  // Wrong operator
+        if (books[i].category === selectedCategory) { 
             filtered.push(books[i]);
         }
     }
