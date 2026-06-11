@@ -1,35 +1,44 @@
-
 let books = [];
 let members = [];
+
 const LATE_FEE_PER_DAY = 0.50;
 const MAX_BOOKS_PER_MEMBER = 5;
 
-// Book class with multiple issues
+// Represents a single book in the library system
 class Book {
     constructor(isbn, title, author, year, copies) {
         this.isbn = isbn;
         this.title = title;
         this.author = author;
         this.year = year;
+
+        // Inventory tracking
         this.availableCopies = copies;
         this.totalCopies = copies;
+
+        // Tracks member IDs who currently borrowed this book
         this.checkedOut = [];
     }
-    
-    checkAvailability(){
+
+    // Checks if at least one copy is available for borrowing
+    checkAvailability() {
         return this.availableCopies > 0;
     }
-    // Missing: method to get book info using template literals
-    getBookInfo(){
-        return formatBookInfo(this)
-    }
-    
-    checkOut(memberId) {
-        
-        if(!this.checkAvailability()) return false;
 
-        this.availableCopies--;
-        this.checkedOut.push(memberId);
+    // Returns formatted book information for display purposes
+    getBookInfo() {
+        return formatBookInfo(this);
+    }
+
+    // Handles borrowing logic for a member
+    checkOut(memberId) {
+
+        // Prevent checkout if no copies are available
+        if (!this.checkAvailability()) return false;
+
+        this.availableCopies--; // update inventory
+
+        this.checkedOut.push(memberId); // track borrower
         return true;
     }
 }
@@ -258,14 +267,13 @@ let LibraryStats = {
     }
 };
 
-// Function with string manipulation errors
+// Creates a formatted summary of a book's details
 function formatBookInfo(book) {
-    // Should use template literals
-    let info = "Title: " + book.title + "\n";
-    info = info + "Author: " + book.author + "\n";
-    info = info + "Year: " + book.year;
-    
-    // Missing: proper string methods (trim, toUpperCase, etc.)
+
+    let info = `Title: ${book.title.toUppercase()}
+                Author: ${book.author}
+                Year: ${book.year}
+                `.trim()
     
     return info;
 }
