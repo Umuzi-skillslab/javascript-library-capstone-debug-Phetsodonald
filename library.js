@@ -20,6 +20,9 @@ class Book {
         return this.availableCopies > 0;
     }
     // Missing: method to get book info using template literals
+    getBookInfo(){
+        return formatBookInfo(this)
+    }
     
     checkOut(memberId) {
         // No validation for available copies
