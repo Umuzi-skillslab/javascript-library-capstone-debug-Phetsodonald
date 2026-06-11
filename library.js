@@ -11,7 +11,8 @@ class Book {
         this.title = title;
         this.author = author;
         this.year = year;
-        // Missing: availableCopies and totalCopies properties
+        this.availableCopies = copies;
+        this.totalCopies = copies;
         this.checkedOut = [];
     }
     
