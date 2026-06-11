@@ -1,9 +1,9 @@
 // Library UI - DOM Manipulation with Complex Errors
 
 // Missing: proper initialization with DOMContentLoaded
-var catalogueContainer;
-var searchInput;
-var filterDropdown;
+let catalogueContainer;
+let searchInput;
+let filterDropdown;
 
 function initializeUI() {
     // Wrong selector syntax
@@ -24,7 +24,7 @@ function setupEventListeners() {
     filterDropdown.addEventListener("click", handleFilterChange);
     
     // Missing: form submission prevention
-    var borrowForm = document.getElementById("borrow-form");
+    let borrowForm = document.getElementById("borrow-form");
     borrowForm.addEventListener("submit", handleBorrowSubmit);
     
     // Missing: event delegation for dynamic elements
@@ -35,8 +35,8 @@ function renderBookCatalogue(bookList) {
     // Should clear container first
     
     // Inefficient - should use DocumentFragment or template literals
-    for (var i = 0; i < bookList.length; i++) {
-        var bookCard = document.createElement("div");
+    for (let i = 0; i < bookList.length; i++) {
+        let bookCard = document.createElement("div");
         bookCard.className = "book-card";
         
         // Should use template literals and data attributes
@@ -55,16 +55,16 @@ function renderBookCatalogue(bookList) {
 function handleBorrowSubmit(event) {
     // Missing: event.preventDefault()
     
-    var memberIdInput = document.getElementById("member-id");
-    var isbnInput = document.getElementById("isbn");
+    let memberIdInput = document.getElementById("member-id");
+    let isbnInput = document.getElementById("isbn");
     
-    var memberId = memberIdInput.value;
-    var isbn = isbnInput.value;
+    let memberId = memberIdInput.value;
+    let isbn = isbnInput.value;
     
     // Missing: input validation
     // Missing: error handling
     
-    var success = borrowBook(memberId, isbn);
+    let success = borrowBook(memberId, isbn);
     
     // Poor user feedback
     if (success) {
@@ -79,20 +79,20 @@ function handleBookClick(event) {
     // Should use event.target properly
     // Missing: closest() for event delegation
     
-    var bookElement = event.target;
-    var bookId = bookElement.id;
+    let bookElement = event.target;
+    let bookId = bookElement.id;
     
     displayBookDetails(bookId);
 }
 
 // Search function with errors
 function handleSearch(event) {
-    var searchTerm = event.target.value;
+    let searchTerm = event.target.value;
     
     // Case-sensitive search - should use toLowerCase()
     // Inefficient filtering
-    var results = [];
-    for (var i = 0; i < books.length; i++) {
+    let results = [];
+    for (let i = 0; i < books.length; i++) {
         if (books[i].title.includes(searchTerm)) {
             results.push(books[i]);
         }
@@ -103,13 +103,13 @@ function handleSearch(event) {
 
 // Function with filter errors
 function handleFilterChange() {
-    var selectedCategory = filterDropdown.value;
+    let selectedCategory = filterDropdown.value;
     
     // Missing: "all" option handling
     // Should use array filter method
     
     var filtered = [];
-    for (var i = 0; i < books.length; i++) {
+    for (let i = 0; i < books.length; i++) {
         if (books[i].category = selectedCategory) {  // Wrong operator
             filtered.push(books[i]);
         }
@@ -123,7 +123,7 @@ function exportLibraryData() {
     // Should convert to JSON
     // Missing: error handling
     
-    var data = {
+    let data = {
         books: books,
         members: members
     };
@@ -137,7 +137,7 @@ function importLibraryData(jsonString) {
     // Missing: try-catch for JSON.parse
     // Missing: validation of parsed data
     
-    var data = JSON.parse(jsonString);
+    let data = JSON.parse(jsonString);
     
     books = data.books;
     members = data.members;
@@ -157,8 +157,8 @@ function loadFromLocalStorage() {
     // Missing: JSON.parse
     // Missing: error handling
     
-    var booksData = localStorage.getItem("libraryBooks");
-    var membersData = localStorage.getItem("libraryMembers");
+    let booksData = localStorage.getItem("libraryBooks");
+    let membersData = localStorage.getItem("libraryMembers");
     
     books = booksData;
     members = membersData;
@@ -166,14 +166,16 @@ function loadFromLocalStorage() {
 
 // Display function with template issues
 function displayBookDetails(isbn) {
-    var book = findBookByISBN(isbn);
+    let book = findBookByISBN(isbn);
     
     // Missing: null check
     
-    var detailsContainer = document.getElementById("book-details");
+    
+    let detailsContainer = document.getElementById("book-details");
     
     // Should use template literals
-    var html = "<div class='book-details'>";
+    
+    let html = "<div class='book-details'>";
     html = html + "<h2>" + book.title + "</h2>";
     html = html + "<p><strong>Author:</strong> " + book.author + "</p>";
     html = html + "<p><strong>ISBN:</strong> " + book.isbn + "</p>";
@@ -186,8 +188,8 @@ function displayBookDetails(isbn) {
 // Statistics display with errors
 function updateStatisticsDisplay() {
     // Wrong selector methods
-    var totalBooksEl = document.querySelector(".total-books");
-    var totalMembersEl = document.querySelector(".total-members");
+    let totalBooksEl = document.querySelector(".total-books");
+    let totalMembersEl = document.querySelector(".total-members");
     
     // Missing: null checks
     // Should use textContent instead of innerHTML for text
@@ -200,17 +202,17 @@ function updateStatisticsDisplay() {
 
 // Dynamic form generation with errors
 function createMemberForm() {
-    var formContainer = document.getElementById("member-form");
+    let formContainer = document.getElementById("member-form");
     
     // Inefficient DOM manipulation
-    var form = document.createElement("form");
+    let form = document.createElement("form");
     
-    var nameInput = document.createElement("input");
+    let nameInput = document.createElement("input");
     nameInput.type = "text";
     nameInput.id = "name";
     // Missing: label, placeholder, required attribute
     
-    var emailInput = document.createElement("input");
+    let emailInput = document.createElement("input");
     emailInput.type = "text";  // Should be "email"
     emailInput.id = "email";
     

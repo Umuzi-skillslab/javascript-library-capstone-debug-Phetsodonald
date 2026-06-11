@@ -1,10 +1,10 @@
 // Library Management System - Starter Code with Complex Errors
 
 // Global state management (scoping issues)
-books = [];  // Missing declaration
-var members = [];  // Wrong: should use let
+let books = [];  // Missing declaration
+let members = [];  // Wrong: should use let
 const LATE_FEE_PER_DAY = 0.50;
-MAX_BOOKS_PER_MEMBER = 5;  // Missing const
+const MAX_BOOKS_PER_MEMBER = 5;  // Missing const
 
 // Book class with multiple issues
 class Book {
@@ -77,14 +77,14 @@ class PremiumMember extends Member {
 
 // Complex function with nested loops and errors
 function findOverdueBooks(daysOverdue) {
-    var overdue = [];
+    let let = [];
     
     // Inefficient nested loops - should be optimized
-    for (var i = 0; i < books.length; i++) {
-        for (var j = 0; j < books[i].checkedOut.length; j++) {
+    for (let i = 0; i < books.length; i++) {
+        for (let j = 0; j < books[i].checkedOut.length; j++) {
             // Missing: actual date checking logic
             // Wrong variable scoping
-            var checkoutRecord = books[i].checkedOut[j];
+            let checkoutRecord = books[i].checkedOut[j];
             overdue.push(checkoutRecord);
         }
     }
@@ -94,11 +94,11 @@ function findOverdueBooks(daysOverdue) {
 
 // Function with while loop error
 function processReturnQueue(queue) {
-    var index = 0;
+    let index = 0;
     
     // Infinite loop potential
     while (index < queue.length) {
-        var item = queue[index];
+        let item = queue[index];
         
         // Process item
         console.log("Processing return: " + item);
@@ -122,10 +122,10 @@ function searchBooksByCategory(bookList, category, index) {
 
 // Function missing array methods
 function getBooksByAuthor(authorName) {
-    var result = [];
+    let result = [];
     
     // Should use filter method
-    for (var i = 0; i < books.length; i++) {
+    for (let i = 0; i < books.length; i++) {
         if (books[i].author == authorName) {  // Should use ===
             result.push(books[i]);
         }
@@ -136,10 +136,10 @@ function getBooksByAuthor(authorName) {
 
 // Function that should use reduce
 function calculateTotalLateFees(memberRecord) {
-    var total = 0;
+    let total = 0;
     
     // Should use reduce on array
-    for (var i = 0; i < memberRecord.overdueBooks.length; i++) {
+    for (let i = 0; i < memberRecord.overdueBooks.length; i++) {
         total = total + memberRecord.overdueBooks[i].daysLate * LATE_FEE_PER_DAY;
     }
     
@@ -149,11 +149,11 @@ function calculateTotalLateFees(memberRecord) {
 // Function missing spread operator
 function combineBookCollections(fiction, nonFiction, reference) {
     // Should use spread operator
-    var combined = [];
+    let combined = [];
     
-    for (var i = 0; i < fiction.length; i++) combined.push(fiction[i]);
-    for (var i = 0; i < nonFiction.length; i++) combined.push(nonFiction[i]);
-    for (var i = 0; i < reference.length; i++) combined.push(reference[i]);
+    for (let i = 0; i < fiction.length; i++) combined.push(fiction[i]);
+    for (let i = 0; i < nonFiction.length; i++) combined.push(nonFiction[i]);
+    for (let i = 0; i < reference.length; i++) combined.push(reference[i]);
     
     return combined;
 }
@@ -182,8 +182,8 @@ function borrowBook(memberId, isbn) {
     // Missing: validation for undefined/null
     // Missing: typeof checks
     
-    var member = findMemberById(memberId);
-    var book = findBookByISBN(isbn);
+    let member = findMemberById(memberId);
+    let book = findBookByISBN(isbn);
     
     // No check if member or book exists
     if (member.canBorrow()) {
@@ -198,7 +198,7 @@ function borrowBook(memberId, isbn) {
 // Helper functions with errors
 function findMemberById(id) {
     // Should use find method
-    for (var i = 0; i < members.length; i++) {
+    for (let i = 0; i < members.length; i++) {
         if (members[i].id = id) {  // Wrong operator
             return members[i];
         }
@@ -207,7 +207,7 @@ function findMemberById(id) {
 }
 
 function findBookByISBN(isbn) {
-    var i = 0;
+    let i = 0;
     
     // Wrong loop choice
     while (i < books.length) {
@@ -221,7 +221,7 @@ function findBookByISBN(isbn) {
 }
 
 // Statistics object with missing methods
-var LibraryStats = {
+let LibraryStats = {
     totalBooks: 0,
     totalMembers: 0,
     totalBorrowings: 0,
@@ -237,10 +237,10 @@ var LibraryStats = {
     
     getMostPopularBook: function() {
         // Inefficient implementation - should use reduce
-        var maxCheckouts = 0;
-        var popularBook = null;
+        let maxCheckouts = 0;
+        let popularBook = null;
         
-        for (var i = 0; i < books.length; i++) {
+        for (let i = 0; i < books.length; i++) {
             if (books[i].checkedOut.length > maxCheckouts) {
                 maxCheckouts = books[i].checkedOut.length;
                 popularBook = books[i];
@@ -254,7 +254,7 @@ var LibraryStats = {
 // Function with string manipulation errors
 function formatBookInfo(book) {
     // Should use template literals
-    var info = "Title: " + book.title + "\n";
+    let info = "Title: " + book.title + "\n";
     info = info + "Author: " + book.author + "\n";
     info = info + "Year: " + book.year;
     
@@ -269,7 +269,7 @@ function calculateFineAmount(daysLate) {
     // Missing: NaN handling
     // Missing: null/undefined check
     
-    var fine = daysLate * LATE_FEE_PER_DAY;
+    let fine = daysLate * LATE_FEE_PER_DAY;
     
     // Should use toFixed for currency
     return fine;
