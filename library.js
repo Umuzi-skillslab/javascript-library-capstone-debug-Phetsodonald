@@ -25,7 +25,9 @@ class Book {
     }
     
     checkOut(memberId) {
-        // No validation for available copies
+        
+        if(!this.checkAvailability()) return false;
+
         this.checkedOut.push(memberId);
         return true;
     }
