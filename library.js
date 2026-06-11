@@ -4,9 +4,17 @@ let members = [];
 const LATE_FEE_PER_DAY = 0.50;
 const MAX_BOOKS_PER_MEMBER = 5;
 
+const ERROR_MESSAGES = {
+    invalidString: value =>  `Expected a string value, but received : ${value}`,
+    invalidNumber: value =>  `Expected a integer value, but received : ${value}`,
+};
+
 // Represents a single book in the library system
 class Book {
     constructor(isbn, title, author, year, copies) {
+        verifyString(isbn, title, author);
+        verifyNumber(year, copies);
+        
         this.isbn = isbn;
         this.title = title;
         this.author = author;
@@ -42,6 +50,7 @@ class Book {
         return true;
     }
 }
+
 
 // Digital book class with inheritance problems
 class DigitalBook extends Book {
@@ -93,7 +102,7 @@ class PremiumMember extends Member {
 
 // Complex function with nested loops and errors
 function findOverdueBooks(daysOverdue) {
-    let let = [];
+    let overdue = [];
     
     // Inefficient nested loops - should be optimized
     for (let i = 0; i < books.length; i++) {
@@ -270,10 +279,12 @@ let LibraryStats = {
 // Creates a formatted summary of a book's details
 function formatBookInfo(book) {
 
-    let info = `Title: ${book.title.toUppercase()}
-                Author: ${book.author}
-                Year: ${book.year}
-                `.trim()
+    let info = 
+        `
+        TITLE: ${book.title.toUpperCase()}
+        AUTHOR: ${book.author.toUpperCase()}
+        YEAR: ${book.year}
+        `.trim();
     
     return info;
 }
@@ -288,6 +299,24 @@ function calculateFineAmount(daysLate) {
     
     // Should use toFixed for currency
     return fine;
+}
+
+// Validates that all provided values are strings
+function verifyString(...strings){
+    strings.forEach(string => {
+        if( typeof string !== 'string' ){
+            throw new Error(ERROR_MESSAGES.invalidString(string));
+        }
+    });
+}
+
+// Validates that all provided values are integers
+function verifyNumber(...numbers){
+    numbers.forEach(number => {
+        if( typeof number !== 'number' && !Number.isInteger(number)  ){
+            throw new Error(ERROR_MESSAGES.invalidNumber(number));
+        }
+    });
 }
 
 // Missing: module exports
