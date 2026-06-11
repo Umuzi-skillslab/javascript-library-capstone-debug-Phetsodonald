@@ -16,7 +16,9 @@ class Book {
         this.checkedOut = [];
     }
     
-    // Missing: method to check availability
+    checkAvailability(){
+        return this.availableCopies > 0;
+    }
     // Missing: method to get book info using template literals
     
     checkOut(memberId) {
