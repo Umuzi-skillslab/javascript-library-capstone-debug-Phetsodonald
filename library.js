@@ -28,6 +28,7 @@ class Book {
         
         if(!this.checkAvailability()) return false;
 
+        this.availableCopies--;
         this.checkedOut.push(memberId);
         return true;
     }
