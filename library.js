@@ -8,7 +8,8 @@ const ERROR_MESSAGES = {
     invalidString: value =>  `Expected a string value: ${value}`,
     invalidNumber: value =>  `Expected an integer value: ${value}`,
     instanceError: value =>  `Expected instance of ${value}`,
-    invalidId: id => `Member with ID ${id} not found.`,
+    invalidId: id => `Member with ID: ${id} not found.`,
+    invalidIsbn: isbn => `Book with ISBN: ${isbn} not found.`,
 };
 
 // Represents a single book in the library system
@@ -265,17 +266,15 @@ function findMemberById(id) {
 }
 
 function findBookByISBN(isbn) {
-    let i = 0;
+    verifyString(isbn);
+
+    const book = books.find(book => book.isbn === isbn);
     
-    // Wrong loop choice
-    while (i < books.length) {
-        if (books[i].isbn === isbn) {
-            return books[i];
-        }
-        i = i + 1;
+    if(!book){
+        throw new Error(ERROR_MESSAGES.invalidIsbn(isbn))
     }
-    
-    return null;
+
+    return book;
 }
 
 // Statistics object with missing methods
