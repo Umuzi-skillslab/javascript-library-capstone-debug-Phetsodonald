@@ -54,7 +54,7 @@ class Book {
 // Digital book class with inheritance problems
 class DigitalBook extends Book {
     constructor(isbn, title, author, year, fileSize, format) {
-        
+        verifyString(isbn, title, author, year, fileSize, format)
         super(isbn, title, author, year);
 
         this.fileSize = fileSize;
