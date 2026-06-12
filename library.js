@@ -7,7 +7,8 @@ const MAX_BOOKS_PER_MEMBER = 5;
 const ERROR_MESSAGES = {
     invalidString: value =>  `Expected a string value: ${value}`,
     invalidNumber: value =>  `Expected an integer value: ${value}`,
-    instanceError: value =>  `Expected instance of ${value}`
+    instanceError: value =>  `Expected instance of ${value}`,
+    invalidId: id => `Member with ID ${id} not found.`,
 };
 
 // Represents a single book in the library system
@@ -250,15 +251,17 @@ function borrowBook(memberId, isbn) {
     return false;
 }
 
-// Helper functions with errors
+// Finds a member by ID and throws an error if not found
 function findMemberById(id) {
-    // Should use find method
-    for (let i = 0; i < members.length; i++) {
-        if (members[i].id === id) {
-            return members[i];
-        }
+    verifyString(id);
+
+    const member = members.find(member => member.id === id);
+
+    if (!member) {
+        throw new Error(ERROR_MESSAGES.invalidId(id));
     }
-    // Returns undefined implicitly - should handle explicitly
+
+    return member;
 }
 
 function findBookByISBN(isbn) {
