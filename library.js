@@ -92,7 +92,7 @@ class Member {
         this.joinDate = new Date();
     }
     
-    // Missing: method to calculate membership duration
+    // Method to calculate membership duration
     membershipDuration(){
         const today = new Date();
 
@@ -101,7 +101,11 @@ class Member {
          
         return days
     }
-    // Missing: method using destructuring
+
+    // Shows updated member info
+    getUpdatedMemberInfo(updates){    
+        return updateMemberInfo(this, updates);
+    }
     
     canBorrow() {
         
@@ -111,9 +115,6 @@ class Member {
         return true;
     }
 }
-const yo= 
-const yu = new Date()
-console.log(yo - yu)
 
 // Premium member with inheritance issues
 class PremiumMember extends Member {
@@ -216,13 +217,15 @@ function addMultipleBooks(book1, book2, book3) {
     books.push(book3);
 }
 
-// Function missing destructuring
+// Updates member info safely without overwriting missing fields
 function updateMemberInfo(member, updates) {
-    // Should destructure updates object
-    member.name = updates.name;
-    member.email = updates.email;
-    member.membershipType = updates.membershipType;
-    
+
+    const { name, email, membershipType } = updates;
+
+    if (name !== undefined) member.name = name;
+    if (email !== undefined) member.email = email;
+    if (membershipType !== undefined) member.membershipType = membershipType;
+
     return member;
 }
 
