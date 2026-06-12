@@ -82,23 +82,25 @@ class DigitalBook extends Book {
 // Member class with errors
 class Member {
     constructor(id, name, email, membershipType) {
-        verifyString(id, name, email, membershipType);
-        const date = new Date()
-        const today = date.toLocaleDateString('en-GB', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric'
-        }) 
+        verifyString(id, name, email, membershipType); 
 
         this.id = id;
         this.name = name;
         this.email = email;
         this.membershipType = membershipType;
         this.borrowedBooks = [];
-        this.joinDate = today;
+        this.joinDate = new Date();
     }
     
     // Missing: method to calculate membership duration
+    membershipDuration(){
+        const today = new Date();
+
+        const differenceInMs = today - this.joinDate;
+        const days = Math.floor(differenceInMs / 1000 * 60 * 60 * 12);
+         
+        return days
+    }
     // Missing: method using destructuring
     
     canBorrow() {
@@ -109,6 +111,9 @@ class Member {
         return true;
     }
 }
+const yo= 
+const yu = new Date()
+console.log(yo - yu)
 
 // Premium member with inheritance issues
 class PremiumMember extends Member {
