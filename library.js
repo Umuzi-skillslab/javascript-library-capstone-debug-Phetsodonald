@@ -40,6 +40,8 @@ class Book {
 
     // Handles borrowing logic for a member
     checkOut(memberId) {
+        // Digital book class with inheritance problems
+        verifyString(memberId)
 
         // Prevent checkout if no copies are available
         if (!this.checkAvailability()) return false;
@@ -54,8 +56,9 @@ class Book {
 // Digital book class with inheritance problems
 class DigitalBook extends Book {
     constructor(isbn, title, author, year, fileSize, format) {
-        verifyString(isbn, title, author, year, fileSize, format)
-        super(isbn, title, author, year);
+        verifyString(isbn, title, author, format)
+        verifyNumber(year, fileSize);
+        super(isbn, title, author, year, 1);
 
         this.fileSize = fileSize;
         this.format = format;
@@ -63,8 +66,10 @@ class DigitalBook extends Book {
     }
     
     download(memberId) {
-        // Should override differently than physical checkout
-        this.downloads = this.downloads + 1;
+        verifyString(memberId)
+         
+        this.downloads++;
+        return true;
     }
 }
 
