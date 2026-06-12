@@ -7,6 +7,7 @@ const MAX_BOOKS_PER_MEMBER = 5;
 const ERROR_MESSAGES = {
     invalidString: value =>  `Expected a string value: ${value}`,
     invalidNumber: value =>  `Expected an integer value: ${value}`,
+    instanceError: value =>  `Expected instance of ${value}`
 };
 
 // Represents a single book in the library system
@@ -79,7 +80,7 @@ class DigitalBook extends Book {
     }
 }
 
-// Member class with errors
+// Represents a member class
 class Member {
     constructor(id, name, email, membershipType) {
         verifyString(id, name, email, membershipType); 
@@ -92,27 +93,26 @@ class Member {
         this.joinDate = new Date();
     }
     
-    // Method to calculate membership duration
+    // calculate membership duration
     membershipDuration(){
         const today = new Date();
 
         const differenceInMs = today - this.joinDate;
-        const days = Math.floor(differenceInMs / 1000 * 60 * 60 * 12);
+        const days = Math.floor(differenceInMs / (1000 * 60 * 60 * 24));
          
         return days
     }
 
-    // Shows updated member info
+    // returns updated member info
     getUpdatedMemberInfo(updates){    
         return updateMemberInfo(this, updates);
     }
     
-    canBorrow() {
-        
-        if (this.borrowedBooks.length === MAX_BOOKS_PER_MEMBER) {
-            return false;
-        }
-        return true;
+    canBorrow() { 
+        if (this.borrowedBooks.length >= MAX_BOOKS_PER_MEMBER) { 
+            return false; 
+        } 
+        return true; 
     }
 }
 
@@ -209,12 +209,14 @@ function combineBookCollections(fiction, nonFiction, reference) {
     return combined;
 }
 
-// Function missing rest parameters
-function addMultipleBooks(book1, book2, book3) {
-    // Should use rest parameters to accept unlimited books
-    books.push(book1);
-    books.push(book2);
-    books.push(book3);
+// Adds multiple books to the library collection
+function addMultipleBooks(...booksArr) {
+    booksArr.forEach(book => {
+        if(!(book instanceof Book)){
+            throw new Error(ERROR_MESSAGES.instanceError('Book'));
+        }
+        books.push(book)
+    });
 }
 
 // Updates member info safely without overwriting missing fields
@@ -237,7 +239,7 @@ function borrowBook(memberId, isbn) {
     
     let member = findMemberById(memberId);
     let book = findBookByISBN(isbn);
-    
+     
     // No check if member or book exists
     if (member.canBorrow()) {
         book.checkOut(memberId);
