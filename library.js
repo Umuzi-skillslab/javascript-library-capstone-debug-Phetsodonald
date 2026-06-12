@@ -53,7 +53,7 @@ class Book {
     }
 }
 
-// Digital book class with inheritance problems
+// Represents a digital book with download tracking and custom checkout behavior
 class DigitalBook extends Book {
     constructor(isbn, title, author, year, fileSize, format) {
         verifyString(isbn, title, author, format)
@@ -65,11 +65,17 @@ class DigitalBook extends Book {
         this.downloads = 0;
     }
     
+    // Records a download instead of reducing available copies
     download(memberId) {
         verifyString(memberId)
          
         this.downloads++;
         return true;
+    }
+
+    // Overrides physical book checkout behavior for digital books
+    checkOut(memberId){
+        return this.download(memberId)
     }
 }
 
