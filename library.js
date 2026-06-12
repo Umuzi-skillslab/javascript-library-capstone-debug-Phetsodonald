@@ -82,14 +82,20 @@ class DigitalBook extends Book {
 // Member class with errors
 class Member {
     constructor(id, name, email, membershipType) {
-        verifyString(id, name, email, membershipType)
+        verifyString(id, name, email, membershipType);
+        const date = new Date()
+        const today = date.toLocaleDateString('en-GB', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        }) 
 
         this.id = id;
         this.name = name;
         this.email = email;
         this.membershipType = membershipType;
         this.borrowedBooks = [];
-        // Missing: joinDate property
+        this.joinDate = today;
     }
     
     // Missing: method to calculate membership duration
