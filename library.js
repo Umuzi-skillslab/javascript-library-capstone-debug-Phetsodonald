@@ -82,6 +82,8 @@ class DigitalBook extends Book {
 // Member class with errors
 class Member {
     constructor(id, name, email, membershipType) {
+        verifyString(id, name, email, membershipType)
+
         this.id = id;
         this.name = name;
         this.email = email;
