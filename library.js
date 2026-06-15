@@ -11,6 +11,7 @@ const ERROR_MESSAGES = {
     invalidId: id => `Member with ID: ${id} not found.`,
     invalidIsbn: isbn => `Book with ISBN: ${isbn} not found.`,
     invalidArray: value => `${value} must be an array.`,
+    invalidObject: "Expected an object."
 };
 
 // Represents a single book in the library system
@@ -187,16 +188,13 @@ function getBooksByAuthor(authorName) {
     return books.filter(book => book.author === authorName);
 }
 
-// Function that should use reduce
+// Calculates the total late fees for a member
 function calculateTotalLateFees(memberRecord) {
-    let total = 0;
+    verifyObject(memberRecord);
     
-    // Should use reduce on array
-    for (let i = 0; i < memberRecord.overdueBooks.length; i++) {
-        total = total + memberRecord.overdueBooks[i].daysLate * LATE_FEE_PER_DAY;
-    }
-    
-    return memberRecord.redu;
+    return memberRecord.overdueBooks.reduce((total, book) => {
+        total + (book.daysLate * LATE_FEE_PER_DAY), 0
+    });
 }
 
 // Function missing spread operator
@@ -341,6 +339,15 @@ function verifyString(...strings){
     strings.forEach(string => {
         if( typeof string !== 'string' ){
             throw new Error(ERROR_MESSAGES.invalidString(string));
+        }
+    });
+}
+
+// Validates that all provided values are objects
+function verifyObject(...objects) {
+    objects.forEach(object => {
+        if (typeof object !== 'object' || object === null) {
+            throw new Error();
         }
     });
 }
