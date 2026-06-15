@@ -10,6 +10,7 @@ const ERROR_MESSAGES = {
     instanceError: value =>  `Expected instance of ${value}`,
     invalidId: id => `Member with ID: ${id} not found.`,
     invalidIsbn: isbn => `Book with ISBN: ${isbn} not found.`,
+    invalidArray: value => `${value} must be an array.`,
 };
 
 // Represents a single book in the library system
@@ -149,18 +150,21 @@ function findOverdueBooks(daysOverdue) {
     return overdue;
 }
 
-// Function with while loop error
+// Processes each item in the return queue
 function processReturnQueue(queue) {
+
+    if (!Array.isArray(queue)) {
+        throw new Error(ERROR_MESSAGES.invalidArray('queue'));
+    }
+
     let index = 0;
-    
-    // Infinite loop potential
+
     while (index < queue.length) {
-        let item = queue[index];
-        
-        // Process item
-        console.log("Processing return: " + item);
-        
-        // Missing: index increment
+        const item = queue[index];
+
+        console.log(`Processing return: ${item}`);
+
+        index++;
     }
 }
 
