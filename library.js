@@ -173,18 +173,10 @@ function searchBooksByCategory(bookList, category, index) {
     return searchBooksByCategory(bookList, category, index + 1);
 }
 
-// Function missing array methods
+// Returns all books by author
 function getBooksByAuthor(authorName) {
-    let result = [];
-    
-    // Should use filter method
-    for (let i = 0; i < books.length; i++) {
-        if (books[i].author === authorName) {
-            result.push(books[i]);
-        }
-    }
-    
-    return result;
+    verifyString(authorName);
+    return books.filter(book => book.author === authorName);
 }
 
 // Function that should use reduce
@@ -265,6 +257,7 @@ function findMemberById(id) {
     return member;
 }
 
+// Finds a book by ISBN and throws an error if not found
 function findBookByISBN(isbn) {
     verifyString(isbn);
 
