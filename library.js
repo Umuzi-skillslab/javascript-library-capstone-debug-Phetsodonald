@@ -141,6 +141,10 @@ function findOverdueBooks(daysOverdue) {
             overdue.push(checkoutRecord);
         }
     }
+
+    books.filter(book => {
+
+    })
     
     return overdue;
 }
@@ -188,7 +192,7 @@ function calculateTotalLateFees(memberRecord) {
         total = total + memberRecord.overdueBooks[i].daysLate * LATE_FEE_PER_DAY;
     }
     
-    return total;
+    return memberRecord.redu;
 }
 
 // Function missing spread operator
@@ -225,23 +229,25 @@ function updateMemberInfo(member, updates) {
     return member;
 }
 
-// Function with no error handling
+// Borrows a book for a member
 function borrowBook(memberId, isbn) {
-    // Missing: try-catch block
-    // Missing: validation for undefined/null
-    // Missing: typeof checks
-    
-    let member = findMemberById(memberId);
-    let book = findBookByISBN(isbn);
-     
-    // No check if member or book exists
-    if (member.canBorrow()) {
-        book.checkOut(memberId);
+
+    try {
+        verifyString(memberId, isbn);
+        
+        const member = findMemberById(memberId);
+        const book = findBookByISBN(isbn);
+
+        if(!member.canBorrow())return false;
+        if(!book.checkOut(memberId)) return false;
+
         member.borrowedBooks.push(isbn);
         return true;
+    } catch (error) {
+        console.error(error.message);
+        return false;
     }
-    
-    return false;
+
 }
 
 // Finds a member by ID and throws an error if not found
