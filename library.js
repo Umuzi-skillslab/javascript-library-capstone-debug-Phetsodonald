@@ -154,9 +154,7 @@ function findOverdueBooks(daysOverdue) {
 // Processes each item in the return queue
 function processReturnQueue(queue) {
 
-    if (!Array.isArray(queue)) {
-        throw new Error(ERROR_MESSAGES.invalidArray('queue'));
-    }
+    verifyArray(queue);
 
     let index = 0;
 
@@ -197,16 +195,10 @@ function calculateTotalLateFees(memberRecord) {
     });
 }
 
-// Function missing spread operator
+// Combines all book collections into a single array
 function combineBookCollections(fiction, nonFiction, reference) {
-    // Should use spread operator
-    let combined = [];
-    
-    for (let i = 0; i < fiction.length; i++) combined.push(fiction[i]);
-    for (let i = 0; i < nonFiction.length; i++) combined.push(nonFiction[i]);
-    for (let i = 0; i < reference.length; i++) combined.push(reference[i]);
-    
-    return combined;
+    verifyArray(fiction, nonFiction, reference);
+    return [...fiction, ...nonFiction, ...reference];
 }
 
 // Adds multiple books to the library collection
@@ -221,7 +213,7 @@ function addMultipleBooks(...booksArr) {
 
 // Updates member info safely without overwriting missing fields
 function updateMemberInfo(member, updates) {
-
+    verifyObject(updates);
     const { name, email, membershipType } = updates;
 
     if (name !== undefined) member.name = name;
@@ -359,6 +351,14 @@ function verifyNumber(...numbers){
             throw new Error(ERROR_MESSAGES.invalidNumber(number));
         }
     });
+}
+
+function verifyArray(...arrays) {
+    arrays.forEach(array => {
+        if(!Array.isArray(array)){
+            throw new Error(ERROR_MESSAGES.invalidArray(array));
+        }
+    })
 }
 
 // Missing: module exports
