@@ -53,7 +53,7 @@ class Book {
         
         this.availableCopies--; // update inventory
 
-        this.checkedOut.push(memberId); // track borrower
+        this.checkedOut.push({memberId, borrowDate: new Date()}); // track borrower
         return true;
     }
 }
@@ -133,25 +133,21 @@ class PremiumMember extends Member {
     }
 }
 
-// Complex function with nested loops and errors
 function findOverdueBooks(daysOverdue) {
-    let overdue = [];
-    
-    // Inefficient nested loops - should be optimized
-    for (let i = 0; i < books.length; i++) {
-        for (let j = 0; j < books[i].checkedOut.length; j++) {
-            // Missing: actual date checking logic
-            // Wrong variable scoping
-            let checkoutRecord = books[i].checkedOut[j];
-            overdue.push(checkoutRecord);
-        }
-    }
+    verifyNumber(daysOverdue);
 
-    books.filter(book => {
+    return books.flatMap(book =>
+        book.checkedOut.filter(checkoutRecord => {
+            const borrowedDate = new Date(checkoutRecord.borrowDate);
+            const today = new Date();
 
-    })
-    
-    return overdue;
+            const daysBorrowed = Math.floor(
+                (today - borrowedDate) / (1000 * 60 * 60 * 24)
+            );
+
+            return daysBorrowed > daysOverdue;
+        })
+    );
 }
 
 // Processes each item in the return queue
