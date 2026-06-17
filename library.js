@@ -1,5 +1,5 @@
 let books = new Map();
-let members = [];
+let members = new Map();
 
 const LATE_FEE_PER_DAY = 0.50;
 const MAX_BOOKS_PER_MEMBER = 5;
@@ -11,19 +11,22 @@ const ERROR_MESSAGES = {
     invalidId: id => `Member with ID: ${id} not found.`,
     invalidIsbn: isbn => `Book with ISBN: ${isbn} not found.`,
     invalidArray: value => `${value} must be an array.`,
-    invalidObject: "Expected an object."
+    invalidObject: "Expected an object.",
+    idDuplicateError: id => `Member with ID ${id} already exists.`,
+    isbnDuplicateError: isbn => `Book with ISBN ${book.isbn} already exists.`
 };
 
 // Represents a single book in the library system
 class Book {
-    constructor(isbn, title, author, year, copies) {
-        verifyString(isbn, title, author);
+    constructor(isbn, title, author, year, copies, category) {
+        verifyString(isbn, title, author, category);
         verifyNumber(year, copies);
 
         this.isbn = isbn;
         this.title = title;
         this.author = author;
         this.year = year;
+        this.category = category;
 
         // Inventory tracking
         this.availableCopies = copies;
@@ -60,10 +63,10 @@ class Book {
 
 // Represents a digital book with download tracking and custom checkout behavior
 class DigitalBook extends Book {
-    constructor(isbn, title, author, year, fileSize, format) {
-        verifyString(isbn, title, author, format)
+    constructor(isbn, title, author, year, category, fileSize, format) {
+        verifyString(isbn, title, author, format, category);
         verifyNumber(year, fileSize);
-        super(isbn, title, author, year, 1);
+        super(isbn, title, author, year, 1, category);
 
         this.fileSize = fileSize;
         this.format = format;
@@ -136,19 +139,25 @@ class PremiumMember extends Member {
 function findOverdueBooks(daysOverdue) {
     verifyNumber(daysOverdue);
 
-    return books.flatMap(book =>
-        book.checkedOut.filter(checkoutRecord => {
-            const borrowedDate = new Date(checkoutRecord.borrowDate);
-            const today = new Date();
+    const today = new Date();
 
-            const daysBorrowed = Math.floor(
-                (today - borrowedDate) / (1000 * 60 * 60 * 24)
-            );
+    return [...books.values()].flatMap(book =>
+        book.checkedOut
+            .filter(record => {
+                const daysBorrowed = Math.floor(
+                    (today - new Date(record.borrowDate)) /
+                    (1000 * 60 * 60 * 24)
+                );
 
-            return daysBorrowed > daysOverdue;
-        })
+                return daysBorrowed > daysOverdue;
+            })
+            .map(record => ({
+                isbn: book.isbn,
+                memberId: record.memberId,
+                borrowDate: record.borrowDate
+            }))
     );
-}
+}  
 
 // Processes each item in the return queue
 function processReturnQueue(queue) {
@@ -179,7 +188,7 @@ function searchBooksByCategory(bookList, category) {
 // Returns all books by author
 function getBooksByAuthor(authorName) {
     verifyString(authorName);
-    return books.filter(book => book.author === authorName);
+    return [...books.values()].filter(book => book.author === authorName);
 }
 
 // Calculates the total late fees for a member
@@ -187,7 +196,7 @@ function calculateTotalLateFees(memberRecord) {
     verifyObject(memberRecord);
     
     return memberRecord.overdueBooks.reduce((total, book) => {
-        return total + (book.daysLate * LATE_FEE_PER_DAY), 0
+        return total + (book.daysLate * LATE_FEE_PER_DAY);
     }, 0);
 }
 
@@ -200,10 +209,30 @@ function combineBookCollections(fiction, nonFiction, reference) {
 // Adds multiple books to the library collection
 function addMultipleBooks(...booksArr) {
     booksArr.forEach(book => {
-        if(!(book instanceof Book)){
-            throw new Error(ERROR_MESSAGES.instanceError('Book'));
+        if (!(book instanceof Book)) {
+            throw new Error(ERROR_MESSAGES.instanceError("Book"));
         }
+
+        if (books.has(book.isbn)) {
+            throw new Error(ERROR_MESSAGES.isbnDuplicateError(book.isbn));
+        }
+
         books.set(book.isbn, book);
+    });
+}
+
+// Adds multiple Members to the library data
+function addMultipleMembers(...membersArr) {
+    membersArr.forEach(member => {
+        if (!(member instanceof Member)) {
+            throw new Error(ERROR_MESSAGES.instanceError("Member"));
+        }
+
+        if (members.has(member.id)) {
+            throw new Error(ERROR_MESSAGES.idDuplicateError(member.id));
+        }
+
+        members.set(member.id, member);
     });
 }
 
@@ -244,7 +273,7 @@ function borrowBook(memberId, isbn) {
 function findMemberById(id) {
     verifyString(id);
 
-    const member = members.find(member => member.id === id);
+    const member = members.get(id);
 
     if (!member) {
         throw new Error(ERROR_MESSAGES.invalidId(id));
@@ -300,7 +329,7 @@ let LibraryStats = {
     
     updateStats: function() {
         this.totalBooks = books.size;
-        this.totalMembers = members.length;
+        this.totalMembers = members.size;
     },
     
     getMostPopularBook: function() {
@@ -385,11 +414,12 @@ function verifyMap(...maps) {
     });
 }
 
-// Missing: module exports
+
 export {
-  Book,
-  Member,
-  borrowBook,
-  LibraryStats
+    Book,
+    DigitalBook,
+    Member,
+    PremiumMember,
+    borrowBook,
+    LibraryStats
 };
-// Missing: proper data structure for ISBN lookups (Map/Set)
