@@ -168,13 +168,20 @@ function processReturnQueue(queue) {
 }
 
 // Recursive function with multiple errors
-function searchBooksByCategory(bookList, category, index) {
-    // Missing: base case
-    // Missing: undefined/null checks
-    // Wrong comparison
+function searchBooksByCategory(bookList, category, index=0) {
+
+    verifyArray(bookList);
+    verifyString(category);
+    verifyNumber(index);
+
+    if(index >= bookList.length){
+        return [];
+    }
     
     if (bookList[index].category === category) {
-        return [bookList[index]].concat(searchBooksByCategory(bookList, category, index + 1));
+        return [
+            bookList[index], ...searchBooksByCategory(bookList, category, index + 1)
+        ];
     }
     
     return searchBooksByCategory(bookList, category, index + 1);
