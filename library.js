@@ -170,7 +170,7 @@ function processReturnQueue(queue) {
     }
 }
 
-// Recursive function with multiple errors
+// Searchs book by category
 function searchBooksByCategory(bookList, category, index=0) {
 
     verifyArray(bookList);
@@ -344,16 +344,14 @@ function formatBookInfo(book) {
     return info;
 }
 
-// Function with number/type issues
+// Calculates fine amount
 function calculateFineAmount(daysLate) {
-    // Missing: typeof check
-    // Missing: NaN handling
-    // Missing: null/undefined check
+
+    verifyNumber(daysLate);
     
-    let fine = daysLate * LATE_FEE_PER_DAY;
+    const fine = daysLate * LATE_FEE_PER_DAY;
     
-    // Should use toFixed for currency
-    return fine;
+    return fine.toFixed(2);
 }
 
 // Validates that all provided values are strings
