@@ -112,22 +112,26 @@ class Member {
         return updateMemberInfo(this, updates);
     }
     
+    // checks if member can borrow
     canBorrow() { 
-        if (this.borrowedBooks.length >= MAX_BOOKS_PER_MEMBER) { 
-            return false; 
-        } 
-        return true; 
+        return this.borrowedBooks.length < MAX_BOOKS_PER_MEMBER;
+          
     }
 }
 
-// Premium member with inheritance issues
+// Represents a Premium member class
 class PremiumMember extends Member {
     constructor(id, name, email) {
+        verifyString(id, name, email);
+
         super(id, name, email, "premium");
-        // Missing: additional premium benefits properties
+        this.maxBooks = 15;
     }
     
-    // Should override canBorrow to allow more books
+    // checks if premium member is able to borrow
+    canBorrow(){
+        return this.borrowedBooks.length < this.maxBooks;
+    }
 }
 
 // Complex function with nested loops and errors
