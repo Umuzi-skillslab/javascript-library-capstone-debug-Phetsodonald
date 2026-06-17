@@ -114,8 +114,7 @@ class Member {
     
     // checks if member can borrow
     canBorrow() { 
-        return this.borrowedBooks.length < MAX_BOOKS_PER_MEMBER;
-          
+        return this.borrowedBooks.length < MAX_BOOKS_PER_MEMBER;     
     }
 }
 
@@ -287,9 +286,31 @@ let LibraryStats = {
     totalMembers: 0,
     totalBorrowings: 0,
     
-    // Missing: method using Math object for calculations
-    // Missing: method using for-of loop
-    // Missing: method returning object with destructuring
+    // calculates total borrowings using for of loop
+    calculateTotalBorrowings: function(){
+        let total = 0;
+
+        for(book of books){
+            total += book.checkedOut.length;
+        }
+
+        this.totalBorrowings = total;
+        return total;
+    },
+
+    // Calculates borrowing avarage using Math objects
+    calculateAvarageBorrowingsPerBook: function(){
+        if(books.length === 0)return 0;
+
+        return Math.round(this.totalBorrowings / books.length);
+    },
+
+    // return summary of the library stats
+    getSummary: function(){
+        const { totalBooks, totalMembers, totalBorrowings} = this;
+
+        return {totalBooks, totalMembers, totalBorrowings};  
+    },
     
     updateStats: function() {
         this.totalBooks = books.length;
@@ -297,18 +318,16 @@ let LibraryStats = {
     },
     
     getMostPopularBook: function() {
-        // Inefficient implementation - should use reduce
-        let maxCheckouts = 0;
-        let popularBook = null;
-        
-        for (let i = 0; i < books.length; i++) {
-            if (books[i].checkedOut.length > maxCheckouts) {
-                maxCheckouts = books[i].checkedOut.length;
-                popularBook = books[i];
-            }
-        }
-        
-        return popularBook;
+        // Checks for a popular book
+        if (books.length === 0)return null;
+
+        return books.reduce((previousBook, currentBook) => 
+            currentBook.checkedOut.length > previousBook.checkedOut.length
+         ? currentBook 
+         : previousBook
+        );
+
+
     }
 };
 
