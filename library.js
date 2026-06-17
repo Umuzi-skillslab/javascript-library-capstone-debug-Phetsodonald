@@ -1,4 +1,4 @@
-let books = [];
+let books = new Map();
 let members = [];
 
 const LATE_FEE_PER_DAY = 0.50;
@@ -167,23 +167,13 @@ function processReturnQueue(queue) {
 }
 
 // Searchs book by category
-function searchBooksByCategory(bookList, category, index=0) {
-
-    verifyArray(bookList);
+function searchBooksByCategory(bookList, category) {
+    verifyMap(bookList);
     verifyString(category);
-    verifyNumber(index);
 
-    if(index >= bookList.length){
-        return [];
-    }
-    
-    if (bookList[index].category === category) {
-        return [
-            bookList[index], ...searchBooksByCategory(bookList, category, index + 1)
-        ];
-    }
-    
-    return searchBooksByCategory(bookList, category, index + 1);
+    return [...bookList.values()].filter(
+        book => book.category === category
+    );
 }
 
 // Returns all books by author
@@ -197,8 +187,8 @@ function calculateTotalLateFees(memberRecord) {
     verifyObject(memberRecord);
     
     return memberRecord.overdueBooks.reduce((total, book) => {
-        total + (book.daysLate * LATE_FEE_PER_DAY), 0
-    });
+        return total + (book.daysLate * LATE_FEE_PER_DAY), 0
+    }, 0);
 }
 
 // Combines all book collections into a single array
@@ -213,7 +203,7 @@ function addMultipleBooks(...booksArr) {
         if(!(book instanceof Book)){
             throw new Error(ERROR_MESSAGES.instanceError('Book'));
         }
-        books.push(book)
+        books.set(book.isbn, book);
     });
 }
 
@@ -267,7 +257,7 @@ function findMemberById(id) {
 function findBookByISBN(isbn) {
     verifyString(isbn);
 
-    const book = books.find(book => book.isbn === isbn);
+    const book = books.get(isbn);
     
     if(!book){
         throw new Error(ERROR_MESSAGES.invalidIsbn(isbn))
@@ -286,7 +276,7 @@ let LibraryStats = {
     calculateTotalBorrowings: function(){
         let total = 0;
 
-        for(book of books){
+        for(const book of books.values()){
             total += book.checkedOut.length;
         }
 
@@ -295,10 +285,10 @@ let LibraryStats = {
     },
 
     // Calculates borrowing avarage using Math objects
-    calculateAvarageBorrowingsPerBook: function(){
-        if(books.length === 0)return 0;
+    calculateAverageBorrowingsPerBook: function(){
+        if(books.size === 0)return 0;
 
-        return Math.round(this.totalBorrowings / books.length);
+        return Math.round(this.totalBorrowings / books.size);
     },
 
     // return summary of the library stats
@@ -309,15 +299,17 @@ let LibraryStats = {
     },
     
     updateStats: function() {
-        this.totalBooks = books.length;
+        this.totalBooks = books.size;
         this.totalMembers = members.length;
     },
     
     getMostPopularBook: function() {
         // Checks for a popular book
-        if (books.length === 0)return null;
+        if (books.size === 0)return null;
 
-        return books.reduce((previousBook, currentBook) => 
+        const bookList = [...books.values()];
+
+        return bookList.reduce((previousBook, currentBook) => 
             currentBook.checkedOut.length > previousBook.checkedOut.length
          ? currentBook 
          : previousBook
@@ -347,7 +339,7 @@ function calculateFineAmount(daysLate) {
     
     const fine = daysLate * LATE_FEE_PER_DAY;
     
-    return fine.toFixed(2);
+    return Number(fine.toFixed(2));
 }
 
 // Validates that all provided values are strings
@@ -363,7 +355,7 @@ function verifyString(...strings){
 function verifyObject(...objects) {
     objects.forEach(object => {
         if (typeof object !== 'object' || object === null) {
-            throw new Error();
+            throw new Error(ERROR_MESSAGES.invalidObject);
         }
     });
 }
@@ -385,5 +377,19 @@ function verifyArray(...arrays) {
     })
 }
 
+function verifyMap(...maps) {
+    maps.forEach(map => {
+        if (!(map instanceof Map)) {
+            throw new Error(ERROR_MESSAGES.instanceError("Map"));
+        }
+    });
+}
+
 // Missing: module exports
+export {
+  Book,
+  Member,
+  borrowBook,
+  LibraryStats
+};
 // Missing: proper data structure for ISBN lookups (Map/Set)
