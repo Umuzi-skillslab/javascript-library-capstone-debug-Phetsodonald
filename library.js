@@ -350,15 +350,10 @@ let LibraryStats = {
 
 // Creates a formatted summary of a book's details
 function formatBookInfo(book) {
+        return `TITLE: ${book.title.toUpperCase()}
+    AUTHOR: ${book.author.toUpperCase()}
+    YEAR: ${book.year}`.trim();
 
-    let info = 
-        `
-        TITLE: ${book.title.toUpperCase()}
-        AUTHOR: ${book.author.toUpperCase()}
-        YEAR: ${book.year}
-        `.trim();
-    
-    return info;
 }
 
 // Calculates fine amount
@@ -415,11 +410,12 @@ function verifyMap(...maps) {
 }
 
 
-export {
+module.exports = {
     Book,
     DigitalBook,
     Member,
     PremiumMember,
     borrowBook,
-    LibraryStats
+    LibraryStats,
+    ERROR_MESSAGES
 };

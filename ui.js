@@ -61,7 +61,7 @@ function handleBorrowSubmit(event) {
     let memberId = memberIdInput.value;
     let isbn = isbnInput.value;
     
-    // Missing: input validation
+    // Missing: input validation 
     // Missing: error handling
     
     let success = borrowBook(memberId, isbn);
