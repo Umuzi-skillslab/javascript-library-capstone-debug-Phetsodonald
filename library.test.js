@@ -168,18 +168,27 @@ describe('DigitalBook Class', () => {
     
 });
 
-// describe('Member Class', () => {
-//     test('canBorrow returns boolean', () => {
-//         var member = new Member(1, 'John Doe', 'john@example.com', 'standard');
-//         var result = member.canBorrow();
+describe('Member Class', () => {
+    test('canBorrow returns boolean', () => {
+        const member = new Member('member1', 'John Doe', 'john@example.com', 'standard');
         
-//         // Wrong assertion type
-//         expect(typeof result).toBe('boolean');
-//     });
+        expect(member.canBorrow()).toBe(true);
+    });
     
-//     // Missing: test for borrow limit
-//     // Missing: test for membership duration calculation
-// });
+    // Missing: test for borrow limit
+    test('should check for borrow limit', () => {
+        const member = new Member('member1', 'John Doe', 'john@example.com', 'standard');
+        const book = new Book('978-0-123', 'Ice and Fire', 'Phetso', 2020, 5, 'fiction');
+        
+        member.borrowedBooks.push(book)
+        member.borrowedBooks.push(book)
+        member.borrowedBooks.push(book)
+        member.borrowedBooks.push(book)
+        member.borrowedBooks.push(book)
+        expect(member.canBorrow()).toBe(false);
+    })    
+    // Missing: test for membership duration calculation
+});
 
 // describe('PremiumMember Class', () => {
 //     // Missing: all tests for premium member
