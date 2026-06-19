@@ -86,12 +86,87 @@ describe('Book Class', () => {
 
 });
 
-// describe('DigitalBook Class', () => {
-//     const ebook = new DigitalBook('778-0-123', 'song of ice and fire', 'Phetso', 1993, 'fiction', 12, 'pdf')
-//     // Missing: test for inheritance
-//     // Missing: test for super() call
-//     // Missing: test for download method
-// });
+describe('DigitalBook Class', () => {
+    // HAPPY TESTS
+    test('should check if ebook is an instanceOf Book and DigitalBook classes', () => {
+        const ebook = new DigitalBook('778-0-123', 'song of ice and fire', 'Phetso', 1993, 'fiction', 12, 'pdf');
+
+        expect(ebook instanceof Book).toBe(true);
+        expect(ebook instanceof DigitalBook).toBe(true);
+    })
+    
+    test('should check if the super() is called ', () => {
+        const ebook = new DigitalBook('778-0-123', 'song of ice and fire', 'Phetso', 1993, 'fiction', 12, 'pdf');
+        expect(ebook.isbn).toBe('778-0-123');
+        expect(ebook.title).toBe('song of ice and fire');
+        expect(ebook.author).toBe('Phetso');
+        expect(ebook.year).toBe(1993);
+        expect(ebook.availableCopies).toBe(1);
+        expect(ebook.category).toBe('fiction')
+    });
+    
+    test('should check if the downloads increments after a is downloaded', () => {
+        const member = new Member('member165', 'Phetso', 'Phetso@gmail.com');
+        const ebook = new DigitalBook('778-0-123', 'song of ice and fire', 'Phetso', 1993, 'fiction', 12, 'pdf');
+
+        expect(ebook.download(member.id)).toBe(true);
+        expect(ebook.downloads).toBe(1);
+
+    });
+
+    test('should check if check out method increaments download', () => {
+        const member = new Member('member165', 'Phetso', 'Phetso@gmail.com');
+        const ebook = new DigitalBook('778-0-123', 'song of ice and fire', 'Phetso', 1993, 'fiction', 12, 'pdf');
+
+        ebook.checkOut(member.id);
+        expect(ebook.downloads).toBe(1);
+    });
+
+    // SAD TESTS
+    test('should throw an error if invalid value is passed to isbn input.', () => {
+        
+        expect(() => {
+            const ebook = new DigitalBook(null, 'song of ice and fire', 'Phetso', 1993, 'fiction', 12, 'pdf');
+        }).toThrowError(ERROR_MESSAGES.invalidString(null));
+    });
+
+    test('should throw an error if invalid value is passed to title input', () => {
+        expect(() => {
+            const ebook = new DigitalBook('778-0-123', false, 'Phetso', 1993, 'fiction', 12, 'pdf');
+        }).toThrowError(ERROR_MESSAGES.invalidString(false));
+    });
+
+    test('should throw an error if invalid value is passed to author input.', () => {
+        expect(() => {
+            const ebook = new DigitalBook('778-0-123', 'song of ice and fire', undefined, 1993, 'fiction', 12, 'pdf');
+        }).toThrowError(ERROR_MESSAGES.invalidString(undefined));
+    });
+
+    test('should throw an error if invalid value is passed to year input', () => {
+        expect(() => {
+            const ebook = new DigitalBook('778-0-123', 'song of ice and fire', 'Phetso', -1993, 'fiction', 12, 'pdf');
+        }).toThrowError(ERROR_MESSAGES.invalidNumber(-1993));
+    });
+
+    test('should throw an error if invalid value is passed to category input.', () => {
+        expect(() => {
+            const ebook = new DigitalBook('778-0-123', 'song of ice and fire', 'Phetso', 1993, 16893, 12, 'pdf');
+        }).toThrowError(ERROR_MESSAGES.invalidString(16893))
+    });
+
+    test('should throw an error if invalid value is passed to fileSize input.', () => {
+        expect(() => {
+            const ebook = new DigitalBook('778-0-123', 'song of ice and fire', 'Phetso', 1993, 'fiction', 'MB', 'pdf');
+        }).toThrowError(ERROR_MESSAGES.invalidNumber('MB'));
+    });
+
+    test('should throw an error if invalid value is passed to format input.', () => {
+        expect(() => {
+            const ebook = new DigitalBook('778-0-123', 'song of ice and fire', 'Phetso', 1993, 'fiction', 'MB', -1673.8903);
+        }).toThrowError(ERROR_MESSAGES.invalidString(-1673.8903));
+    })
+    
+});
 
 // describe('Member Class', () => {
 //     test('canBorrow returns boolean', () => {
