@@ -28,9 +28,21 @@ describe('Book Class', () => {
     YEAR: 2020`
         ); 
     });
-    // Missing: test for checkOut method
-    // Missing: test for availability checking
-    // Missing: test for template literal methods
+    
+    test('should checkout if there are available copies', () => {
+        const member = new Member('member165', 'Phetso', 'Phetso@gmail.com');
+        const book = new Book('978-0-123', 'Ice and Fire', 'Phetso', 2020, 5, 'fiction');
+
+        expect(book.checkOut(member.id)).toBe(true);
+        expect(book.availableCopies).toBe(4);
+        expect(book.checkedOut.length).toBe(1)
+    });
+
+    test('should check for copies availability', () => {
+        const book = new Book('978-0-123', 'Ice and Fire', 'Phetso', 2020, 0, 'fiction');
+        expect(book.checkAvailability()).toBe(false)
+    })
+
 
 
     // SAD TESTS
@@ -75,6 +87,7 @@ describe('Book Class', () => {
 });
 
 // describe('DigitalBook Class', () => {
+//     const ebook = new DigitalBook('778-0-123', 'song of ice and fire', 'Phetso', 1993, 'fiction', 12, 'pdf')
 //     // Missing: test for inheritance
 //     // Missing: test for super() call
 //     // Missing: test for download method

@@ -89,7 +89,7 @@ class DigitalBook extends Book {
 
 // Represents a member class
 class Member {
-    constructor(id, name, email, membershipType) {
+    constructor(id, name, email, membershipType='standard') {
         verifyString(id, name, email, membershipType); 
 
         this.id = id;
