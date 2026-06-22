@@ -1,3 +1,5 @@
+const {verifyString, verifyNumber, findBookByISBN, formatBookInfo, updateMemberInfo} = require('./utils')
+
 let books = new Map();
 let members = [];
 
@@ -188,7 +190,5 @@ module.exports = {
     DigitalBook,
     Member,
     PremiumMember,
-    borrowBook,
     LibraryStats,
-    ERROR_MESSAGES,
 };

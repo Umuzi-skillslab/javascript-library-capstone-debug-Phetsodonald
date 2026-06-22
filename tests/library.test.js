@@ -1,4 +1,5 @@
-const {Book, DigitalBook, Member, PremiumMember, ERROR_MESSAGES, addMultipleMembers} = require('../src/library');
+const {Book, DigitalBook, Member, PremiumMember} = require('../src/library');
+const {ERROR_MESSAGES, addMultipleMembers, verifyString, verifyNumber} = require('../src/utils');
 
 describe('Book Class', () => {
     // HAPPY TESTS
@@ -205,6 +206,25 @@ describe('Member Class', () => {
 
         expect(duration).toBe(30);
     });
+
+    test('should get updated member info', () => {
+        const member = new Member(
+            'member1',
+            'John Doe',
+            'john@example.com',
+            'standard'
+        );
+
+        member.getUpdatedMemberInfo({
+            name: 'Jane Doe',
+            email: 'jane@gmail.com'
+        });
+
+        expect(member.name).toBe('Jane Doe');
+        expect(member.email).toBe('jane@gmail.com');
+        expect(member.membershipType).toBe('standard');
+
+    })
     
 });
 

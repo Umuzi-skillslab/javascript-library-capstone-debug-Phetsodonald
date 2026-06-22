@@ -234,3 +234,28 @@ function findBookByISBN(isbn) {
 
     return book;
 }
+
+module.exports = {
+    findBookByISBN,
+    findMemberById,
+    findOverdueBooks,
+    formatBookInfo,
+    verifyArray,
+    verifyMap,
+    verifyNumber,
+    verifyObject,
+    verifyString,
+    borrowBook,
+    updateMemberInfo,
+    calculateFineAmount,
+    calculateTotalLateFees,
+    checkMember,
+    combineBookCollections, 
+    addMultipleBooks,
+    addMultipleMembers,
+    searchBooksByCategory,
+    getBooksByAuthor,
+    processReturnQueue,
+    ERROR_MESSAGES,
+    
+}
