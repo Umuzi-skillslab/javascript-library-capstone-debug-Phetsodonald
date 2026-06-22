@@ -186,7 +186,12 @@ describe('Member Class', () => {
         member.borrowedBooks.push(book)
         member.borrowedBooks.push(book)
         expect(member.canBorrow()).toBe(false);
-    })    
+    });
+    
+    test('should calculate membership duration', () => {
+        const member = new Member('member1', 'John Doe', 'john@example.com', 'standard');
+        
+    })
     // Missing: test for membership duration calculation
 });
 

@@ -1,5 +1,5 @@
 let books = new Map();
-let members = new Map();
+let members = [];
 
 const LATE_FEE_PER_DAY = 0.50;
 const MAX_BOOKS_PER_MEMBER = 5;
@@ -227,12 +227,8 @@ function addMultipleMembers(...membersArr) {
         if (!(member instanceof Member)) {
             throw new Error(ERROR_MESSAGES.instanceError("Member"));
         }
-
-        if (members.has(member.id)) {
-            throw new Error(ERROR_MESSAGES.idDuplicateError(member.id));
-        }
-
-        members.set(member.id, member);
+        checkMember(member.id)
+        members.push(member);
     });
 }
 
@@ -273,7 +269,7 @@ function borrowBook(memberId, isbn) {
 function findMemberById(id) {
     verifyString(id);
 
-    const member = members.get(id);
+    const member = members.find(member => member.id === id);
 
     if (!member) {
         throw new Error(ERROR_MESSAGES.invalidId(id));
@@ -373,6 +369,14 @@ function verifyString(...strings){
             throw new Error(ERROR_MESSAGES.invalidString(string));
         }
     });
+}
+
+function checkMember(memberId) {
+    const memberExists = members.some(member => member.id === memberId);
+
+    if (memberExists) {
+        throw new Error(ERROR_MESSAGES.idDuplicateError(memberId));
+    }
 }
 
 // Validates that all provided values are objects
