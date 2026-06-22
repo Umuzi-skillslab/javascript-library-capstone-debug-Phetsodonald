@@ -1,4 +1,4 @@
-const {Book, DigitalBook, Member, PremiumMember, ERROR_MESSAGES, addMultipleMembers} = require('./library');
+const {Book, DigitalBook, Member, PremiumMember, ERROR_MESSAGES, addMultipleMembers} = require('../src/library');
 
 describe('Book Class', () => {
     // HAPPY TESTS
@@ -175,7 +175,7 @@ describe('Member Class', () => {
         expect(member.canBorrow()).toBe(true);
     });
     
-    // Missing: test for borrow limit
+    
     test('should check for borrow limit', () => {
         const member = new Member('member1', 'John Doe', 'john@example.com', 'standard');
         const book = new Book('978-0-123', 'Ice and Fire', 'Phetso', 2020, 5, 'fiction');
@@ -205,7 +205,7 @@ describe('Member Class', () => {
 
         expect(duration).toBe(30);
     });
-    // Missing: test for membership duration calculation
+    
 });
 
 // describe('PremiumMember Class', () => {
