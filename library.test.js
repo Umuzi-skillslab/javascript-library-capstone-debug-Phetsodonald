@@ -1,4 +1,4 @@
-const {Book, DigitalBook, Member, PremiumMember, ERROR_MESSAGES} = require('./library');
+const {Book, DigitalBook, Member, PremiumMember, ERROR_MESSAGES, addMultipleMembers} = require('./library');
 
 describe('Book Class', () => {
     // HAPPY TESTS
@@ -189,9 +189,22 @@ describe('Member Class', () => {
     });
     
     test('should calculate membership duration', () => {
-        const member = new Member('member1', 'John Doe', 'john@example.com', 'standard');
-        
-    })
+        const member = new Member(
+            'member1',
+            'John Doe',
+            'john@example.com',
+            'standard'
+        );
+
+        member.joinDate = new Date('2025-01-01');
+
+        const mockToday = new Date('2025-01-31');
+        const duration = Math.floor(
+            (mockToday - member.joinDate) / (1000 * 60 * 60 * 24)
+        );
+
+        expect(duration).toBe(30);
+    });
     // Missing: test for membership duration calculation
 });
 

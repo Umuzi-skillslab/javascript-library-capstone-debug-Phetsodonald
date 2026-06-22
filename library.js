@@ -421,5 +421,6 @@ module.exports = {
     PremiumMember,
     borrowBook,
     LibraryStats,
-    ERROR_MESSAGES
+    ERROR_MESSAGES,
+    addMultipleMembers
 };
