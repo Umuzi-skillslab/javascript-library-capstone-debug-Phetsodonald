@@ -1,4 +1,5 @@
 const { books, members } = require('./storage');
+const {LATE_FEE_PER_DAY} = require('./constants')
 
 const ERROR_MESSAGES = {
     invalidString: value =>  `Expected a string value: ${value}`,
@@ -41,11 +42,13 @@ function verifyString(...strings){
 }
 
 function checkMember(memberId) {
+    verifyString(memberId);
     const memberExists = members.some(member => member.id === memberId);
 
     if (memberExists) {
         throw new Error(ERROR_MESSAGES.idDuplicateError(memberId));
     }
+    return memberExists;
 }
 
 // Validates that all provided values are objects
@@ -170,7 +173,7 @@ function addMultipleBooks(...booksArr) {
 // Adds multiple Members to the library data
 function addMultipleMembers(...membersArr) {
     membersArr.forEach(member => {
-        if (!(member instanceof Member)) {
+        if (!member || typeof member !== 'object' || !member.id) {
             throw new Error(ERROR_MESSAGES.instanceError("Member"));
         }
         checkMember(member.id)

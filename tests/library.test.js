@@ -1,6 +1,19 @@
 const { books, members } = require('../src/storage');
 const { Book, Member, PremiumMember, DigitalBook, LibraryStats } = require('../src/library');
-const { findBookByISBN, addMultipleBooks, ERROR_MESSAGES, formatBookInfo, getBooksByAuthor } = require('../src/utils');
+const { findBookByISBN,
+        addMultipleBooks, 
+        findOverdueBooks, 
+        processReturnQueue, 
+        ERROR_MESSAGES, 
+        formatBookInfo, 
+        getBooksByAuthor, 
+        calculateFineAmount, 
+        addMultipleMembers, 
+        checkMember, 
+        verifyObject, 
+        verifyArray, 
+        verifyMap, 
+        searchBooksByCategory} = require('../src/utils');
 
 describe('Book Class', () => {
     // HAPPY TESTS
@@ -359,6 +372,27 @@ describe('Library Functions', () => {
         expect(popular.isbn).toBe('978-0-123');
     });
 
+    test('should search books by category', () => {
+        books.clear();
+        const book1 = new Book('978-0-123', 'Ice and Fire', 'Phetso', 2020, 5, 'fiction');
+        const book2 = new Book('978-0-456', 'Taken', 'Phetso', 2010, 7, 'non-fiction');
+        const book3 = new Book('948-0-456', 'Taken', 'Phetso', 2010, 7, 'non-fiction');
+
+        addMultipleBooks(book1, book2, book3);
+        const results = searchBooksByCategory(books, 'non-fiction');
+
+        expect(results.length).toBe(2);
+    })
+
+    test('should throw an error if invalid value is passed to searchBooksByCategory function.', () => {
+        expect(() => {
+            const results = searchBooksByCategory(books, 1234);
+        }).toThrowError(ERROR_MESSAGES.invalidString(1234))
+    });
+
+    test('should calculate the total late fees', () => {
+
+    })
     
     test('should return empty array when author has no books', () => {
         const result = getBooksByAuthor('Unknown Author');
@@ -378,6 +412,129 @@ describe('Library Functions', () => {
     });
 
 });
+
+describe('calculateFineAmount function', () => {
+    test('should calculate the fine amount', () => {
+        expect(calculateFineAmount(5)).toBe(2.50);
+    });
+
+    test('should return false when member does not exist', () => {
+        const result = checkMember('member12390');
+
+        expect(result).toBe(false);
+    });
+
+    test('should throw an error in an invalid value is passed to calculateFineAmount function.', () => {
+        expect(() => {
+            calculateFineAmount(undefined);
+        }).toThrowError(ERROR_MESSAGES.invalidNumber(undefined));
+    })
+});
+
+describe('findOverdueBooks', () => {
+ test('should return books that are overdue', () => {
+        books.clear();
+
+        const book = new Book(
+            '978-0-123',
+            'Ice and Fire',
+            'Phetso',
+            2020,
+            5,
+            'fiction'
+        );
+
+        const tenDaysAgo = new Date();
+        tenDaysAgo.setDate(tenDaysAgo.getDate() - 10);
+
+        book.checkedOut.push({
+            memberId: 'member1',
+            borrowDate: tenDaysAgo
+        });
+
+        books.set(book.isbn, book);
+
+        const result = findOverdueBooks(7);
+
+        expect(result.length).toBe(1);
+        expect(result[0].isbn).toBe('978-0-123');
+        expect(result[0].memberId).toBe('member1');
+    });
+
+});
+
+describe('processReturnQueue', () => {
+    test('should process all items in the return queue', () => {
+        const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
+
+        processReturnQueue(['book1', 'book2', 'book3']);
+
+        expect(consoleSpy).toHaveBeenCalledTimes(3);
+
+        expect(consoleSpy).toHaveBeenNthCalledWith(
+            1,
+            'Processing return: book1'
+        );
+
+        expect(consoleSpy).toHaveBeenNthCalledWith(
+            2,
+            'Processing return: book2'
+        );
+
+        expect(consoleSpy).toHaveBeenNthCalledWith(
+            3,
+            'Processing return: book3'
+        );
+
+        consoleSpy.mockRestore();
+        });
+})
+
+describe('calculateTotalLateFees', () => {
+    test('should calculate the total late fees', () => {
+        
+    })
+})
+
+describe('utils functions', () => {   
+
+    test('should throw an error if invalid value is passed to verifyObject function.', () => {
+        expect(() => {
+            verifyObject('object')
+        }).toThrowError(ERROR_MESSAGES.invalidObject)
+    });
+
+    test('should throw an error if invalid value is passed to verifyArray function', () => {
+        expect(() => {
+            verifyArray(null);
+        }).toThrowError(ERROR_MESSAGES.invalidArray(null))
+    })
+
+    test('should throw an error if invalid value is passed to verifyMap function', () => {
+        expect(() => {
+            verifyMap('Map');
+        }).toThrowError(ERROR_MESSAGES.instanceError('Map'))
+    })
+
+    test('should throw error when member already exists', () => {
+        const member = new Member(
+            'member12390',
+            'Phetso',
+            'ray@gmail.com',
+            'standard'
+        );
+
+        addMultipleMembers(member);
+
+        expect(() => {
+            checkMember('member12390');
+        }).toThrowError(
+            ERROR_MESSAGES.idDuplicateError('member12390')
+        );
+    });
+
+
+})
 
 // describe('Array Operations', () => {
 //     // Missing: tests for filter operations
