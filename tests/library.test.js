@@ -1,6 +1,6 @@
-const { books } = require('../src/storage');
-const { Book, Member, PremiumMember, DigitalBook } = require('../src/library');
-const { findBookByISBN, addMultipleBooks, ERROR_MESSAGES } = require('../src/utils');
+const { books, members } = require('../src/storage');
+const { Book, Member, PremiumMember, DigitalBook, LibraryStats } = require('../src/library');
+const { findBookByISBN, addMultipleBooks, ERROR_MESSAGES, formatBookInfo, getBooksByAuthor } = require('../src/utils');
 
 describe('Book Class', () => {
     // HAPPY TESTS
@@ -253,11 +253,13 @@ describe('PremiumMember Class', () => {
 });
 
 describe('Library Functions', () => {
-
+    let book1;
+    let book2;
     beforeEach(() => {
         books.clear();
+        members.length = 0;
 
-        const book1 = new Book(
+        book1 = new Book(
             '978-0-123',
             'Ice and Fire',
             'Phetso',
@@ -266,7 +268,7 @@ describe('Library Functions', () => {
             'fiction'
         );
 
-        const book2 = new Book(
+        book2 = new Book(
             '978-0-456',
             'JavaScript Mastery',
             'John Doe',
@@ -278,16 +280,103 @@ describe('Library Functions', () => {
         addMultipleBooks(book1, book2);
     });
 
-    test('findBookByISBN returns book', () => {
-        const book = findBookByISBN('978-0-123');
+    test('should check if findBookByISBN returns book by isbn', () => {
+        const book1 = findBookByISBN('978-0-123');
+        const book2 = findBookByISBN('978-0-456');
 
-        expect(book).toBeDefined();
-        expect(book.title).toBe('Ice and Fire');
+        expect(book1.title).toBe('Ice and Fire');
+        expect(book2.title).toBe('JavaScript Mastery');
     });
     
-    // Missing: test for getBooksByAuthor
-    // Missing: test with empty arrays
-    // Missing: test with null/undefined inputs
+    
+    test('should check if getBooksByAuthor return all books by the author.', () => {
+        const results = getBooksByAuthor('Phetso');
+        expect(results.length).toBe(1);
+        expect(results[0].author).toBe('Phetso');
+    });
+
+    test('should calculate total borrowings correctly', () => {
+        book1.checkedOut.push({ memberId: 'm1', borrowDate: new Date() });
+        book1.checkedOut.push({ memberId: 'm2', borrowDate: new Date() });
+        book2.checkedOut.push({ memberId: 'm3', borrowDate: new Date() });
+
+        const total = LibraryStats.calculateTotalBorrowings();
+        expect(total).toBe(3);
+        expect(LibraryStats.totalBorrowings).toBe(3)
+    });
+
+    test('should calculate average borrowings per book', () => {
+
+        book1.checkedOut.push({ memberId: 'm1', borrowDate: new Date() });
+        book1.checkedOut.push({ memberId: 'm2', borrowDate: new Date() });
+        book2.checkedOut.push({ memberId: 'm3', borrowDate: new Date() });
+
+        LibraryStats.calculateTotalBorrowings();
+
+        const avg = LibraryStats.calculateAverageBorrowingsPerBook();
+
+        expect(avg).toBe(2);
+    });
+
+    test('should return correct library summary', () => {
+
+        members.push({ id: 'm1' });
+        members.push({ id: 'm2' });
+
+        LibraryStats.calculateTotalBorrowings();
+
+        LibraryStats.totalBooks = books.size;
+        LibraryStats.totalMembers = members.length;
+
+        const summary = LibraryStats.getSummary();
+
+        expect(summary).toEqual({
+            totalBooks: 2,
+            totalMembers: 2,
+            totalBorrowings: LibraryStats.totalBorrowings
+        });
+    });
+
+    test('should update stats correctly', () => {
+
+        members.push({ id: 'm1' });
+
+        LibraryStats.updateStats();
+
+        expect(LibraryStats.totalBooks).toBe(2);
+        expect(LibraryStats.totalMembers).toBe(1);
+    });
+
+    test('should return most popular book', () => {
+
+        book1.checkedOut.push({ memberId: 'm1', borrowDate: new Date() });
+        book1.checkedOut.push({ memberId: 'm2', borrowDate: new Date() });
+
+        book2.checkedOut.push({ memberId: 'm3', borrowDate: new Date() });
+
+        const popular = LibraryStats.getMostPopularBook();
+
+        expect(popular.isbn).toBe('978-0-123');
+    });
+
+    
+    test('should return empty array when author has no books', () => {
+        const result = getBooksByAuthor('Unknown Author');
+        expect(result).toEqual([]);
+    });
+
+    test('should throw an error if a invalid value is passed to getBooksByAuthor.', () => {
+        expect(() => {
+            getBooksByAuthor(null)
+        }).toThrowError(ERROR_MESSAGES.invalidString(null));
+    })
+
+    test('should throw an error if an invalid value is passed to findBookByISBN.', () => {
+        expect(() => {
+            findBookByISBN(undefined)
+        }).toThrowError(ERROR_MESSAGES.invalidString(undefined));
+    });
+
 });
 
 // describe('Array Operations', () => {
