@@ -1,3 +1,5 @@
+const { books, members } = require('./storage');
+
 const ERROR_MESSAGES = {
     invalidString: value =>  `Expected a string value: ${value}`,
     invalidNumber: value =>  `Expected an integer value: ${value}`,
@@ -7,7 +9,7 @@ const ERROR_MESSAGES = {
     invalidArray: value => `${value} must be an array.`,
     invalidObject: "Expected an object.",
     idDuplicateError: id => `Member with ID ${id} already exists.`,
-    isbnDuplicateError: isbn => `Book with ISBN ${book.isbn} already exists.`
+    isbnDuplicateError: isbn => `Book with ISBN ${isbn} already exists.`
 };
 
 
@@ -153,7 +155,7 @@ function combineBookCollections(fiction, nonFiction, reference) {
 // Adds multiple books to the library collection
 function addMultipleBooks(...booksArr) {
     booksArr.forEach(book => {
-        if (!(book instanceof Book)) {
+        if (!book || typeof book !== 'object' || !book.isbn) {
             throw new Error(ERROR_MESSAGES.instanceError("Book"));
         }
 

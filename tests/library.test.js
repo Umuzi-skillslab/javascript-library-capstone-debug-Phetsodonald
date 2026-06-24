@@ -1,5 +1,6 @@
-const {Book, DigitalBook, Member, PremiumMember} = require('../src/library');
-const {ERROR_MESSAGES, addMultipleMembers, verifyString, verifyNumber} = require('../src/utils');
+const { books } = require('../src/storage');
+const { Book, Member, PremiumMember, DigitalBook } = require('../src/library');
+const { findBookByISBN, addMultipleBooks, ERROR_MESSAGES } = require('../src/utils');
 
 describe('Book Class', () => {
     // HAPPY TESTS
@@ -197,14 +198,7 @@ describe('Member Class', () => {
             'standard'
         );
 
-        member.joinDate = new Date('2025-01-01');
-
-        const mockToday = new Date('2025-01-31');
-        const duration = Math.floor(
-            (mockToday - member.joinDate) / (1000 * 60 * 60 * 24)
-        );
-
-        expect(duration).toBe(30);
+        expect(member.membershipDuration()).toBe(0);
     });
 
     test('should get updated member info', () => {
@@ -228,27 +222,73 @@ describe('Member Class', () => {
     
 });
 
-// describe('PremiumMember Class', () => {
-//     // Missing: all tests for premium member
-//     // Missing: test for inheritance
-//     // Missing: test for overridden methods
-// });
+describe('PremiumMember Class', () => {
+    
+    test('should check is member is an instance of a Member class', () => {
+        const member = new PremiumMember('member', 'Phetso', 'rose@gmail.com');
+        expect(member instanceof Member).toBe(true);
+        expect(member instanceof PremiumMember).toBe(true);
+    });
 
-// describe('Library Functions', () => {
-//     // Missing: beforeEach to initialize test data
-    
-//     test('findBookByISBN returns book', () => {
-//         // Test data not set up properly
-//         var book = findBookByISBN('978-0-123');
+    test('should check if premium member can borrow more books', () => {
+        const member = new PremiumMember('member', 'Phetso', 'rose@gmail.com')
+        const book = new Book('978-0-123', 'Ice and Fire', 'Phetso', 2020, 5, 'fiction');
+
         
-//         // Will fail - no books in array
-//         expect(book).toBeDefined();
-//     });
+        member.borrowedBooks.push(book);
+        member.borrowedBooks.push(book);
+        member.borrowedBooks.push(book);
+        member.borrowedBooks.push(book);
+        member.borrowedBooks.push(book);
+        member.borrowedBooks.push(book);
+        member.borrowedBooks.push(book);
+        member.borrowedBooks.push(book);
+        member.borrowedBooks.push(book);
+        member.borrowedBooks.push(book);
+
+        expect(member.canBorrow()).toBe(true);
+        expect(member.borrowedBooks.length).toBe(10)
+    });
+
+});
+
+describe('Library Functions', () => {
+
+    beforeEach(() => {
+        books.clear();
+
+        const book1 = new Book(
+            '978-0-123',
+            'Ice and Fire',
+            'Phetso',
+            2020,
+            5,
+            'fiction'
+        );
+
+        const book2 = new Book(
+            '978-0-456',
+            'JavaScript Mastery',
+            'John Doe',
+            2023,
+            3,
+            'technology'
+        );
+
+        addMultipleBooks(book1, book2);
+    });
+
+    test('findBookByISBN returns book', () => {
+        const book = findBookByISBN('978-0-123');
+
+        expect(book).toBeDefined();
+        expect(book.title).toBe('Ice and Fire');
+    });
     
-//     // Missing: test for getBooksByAuthor
-//     // Missing: test with empty arrays
-//     // Missing: test with null/undefined inputs
-// });
+    // Missing: test for getBooksByAuthor
+    // Missing: test with empty arrays
+    // Missing: test with null/undefined inputs
+});
 
 // describe('Array Operations', () => {
 //     // Missing: tests for filter operations
