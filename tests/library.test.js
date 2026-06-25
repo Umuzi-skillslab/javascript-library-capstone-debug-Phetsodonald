@@ -15,6 +15,7 @@ const { findBookByISBN,
         verifyArray, 
         verifyMap, 
         calculateTotalLateFees,
+        combineBookCollections,
         searchBooksByCategory} = require('../src/utils');
 
 describe('Book Class', () => {
@@ -519,6 +520,31 @@ describe('calculateTotalLateFees', () => {
 
         expect(calculateTotalLateFees(memberRecord)).toBe(4 * LATE_FEE_PER_DAY);
     });
+
+    test('should throw an error if an invalid value is passed to calculateTotalLateFees function', () => {
+        
+        expect(() => {
+            calculateTotalLateFees(7);
+        }).toThrowError(ERROR_MESSAGES.invalidObject)
+    })
+});
+
+describe('combineBookCollections',() =>{
+    test('should combine all the arrays in a single array', () => {
+        const fiction = ['song of ice and fire', 'Behind the wall']
+        const nonFiction = ['Story of Mary']
+        const reference = ['Dua lipa']
+
+        const results = combineBookCollections(fiction, nonFiction, reference);
+        expect(results).toEqual(['song of ice and fire', 'Behind the wall', 'Story of Mary', 'Dua lipa'])
+    });
+
+    test('should throw an error if an invalid value is passed', () => {
+        
+        expect(() => {
+            combineBookCollections('fiction', undefined, null);
+        }).toThrowError(ERROR_MESSAGES.invalidArray('fiction'))
+    })
 });
 
 describe('utils functions', () => {   
