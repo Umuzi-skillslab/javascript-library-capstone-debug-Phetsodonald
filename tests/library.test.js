@@ -547,6 +547,32 @@ describe('combineBookCollections',() =>{
     })
 });
 
+describe('addMultipleBooks', () => {
+    
+    test('should add book to the books storage', () => {
+        books.clear();
+        const book1 = new Book('978-0-123', 'Ice and Fire', 'Phetso', 2020, 5, 'fiction');
+        const book2 = new Book('928-0-523', 'Story of Mary', 'Phetso', 2010, 5, 'nonFiction');
+        const book3 = new Book('930-0-183', 'Eddie', 'Phetso', 2017, 5, 'fiction');
+
+        addMultipleBooks(book1, book2, book3)
+        expect(books.size).toBe(3);        
+    });
+
+    test('should throw an error if an invalid value is passed', () => {
+        expect(() => {
+            addMultipleBooks("book1", "book2")
+        }).toThrowError(ERROR_MESSAGES.instanceError("Book"))
+    });
+
+    test('should throw an error if ther is duplicate ISBN', () => {
+        const book1 = new Book('978-0-123', 'Ice and Fire', 'Phetso', 2020, 5, 'fiction');
+        expect(() => {   
+             addMultipleBooks(book1);
+        }).toThrowError(ERROR_MESSAGES.isbnDuplicateError(book1.isbn))
+    })
+})
+
 describe('utils functions', () => {   
 
     test('should throw an error if invalid value is passed to verifyObject function.', () => {
