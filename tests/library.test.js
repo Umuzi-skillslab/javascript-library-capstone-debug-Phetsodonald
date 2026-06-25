@@ -1,4 +1,5 @@
 const { books, members } = require('../src/storage');
+const {LATE_FEE_PER_DAY} = require('../src/constants');
 const { Book, Member, PremiumMember, DigitalBook, LibraryStats } = require('../src/library');
 const { findBookByISBN,
         addMultipleBooks, 
@@ -13,6 +14,7 @@ const { findBookByISBN,
         verifyObject, 
         verifyArray, 
         verifyMap, 
+        calculateTotalLateFees,
         searchBooksByCategory} = require('../src/utils');
 
 describe('Book Class', () => {
@@ -96,8 +98,6 @@ describe('Book Class', () => {
             new Book('978-0-123', 'Ice and Fire', 'Phetso', 2026, 3, undefined);
         }).toThrowError(ERROR_MESSAGES.invalidString(undefined))
     })
-
-    
 
 });
 
@@ -388,11 +388,7 @@ describe('Library Functions', () => {
         expect(() => {
             const results = searchBooksByCategory(books, 1234);
         }).toThrowError(ERROR_MESSAGES.invalidString(1234))
-    });
-
-    test('should calculate the total late fees', () => {
-
-    })
+    });  
     
     test('should return empty array when author has no books', () => {
         const result = getBooksByAuthor('Unknown Author');
@@ -491,10 +487,39 @@ describe('processReturnQueue', () => {
 })
 
 describe('calculateTotalLateFees', () => {
-    test('should calculate the total late fees', () => {
-        
-    })
-})
+    
+    test('should correctly calculate total late fees for multiple overdue books', () => {
+        const memberRecord = {
+            overdueBooks: [
+                { daysLate: 2 },
+                { daysLate: 5 },
+                { daysLate: 1 }
+            ]
+        };
+
+        const expected = (2 + 5 + 1) * LATE_FEE_PER_DAY;
+
+        expect(calculateTotalLateFees(memberRecord)).toBe(expected);
+    });
+
+    test('should return 0 when there are no overdue books', () => {
+        const memberRecord = {
+            overdueBooks: []
+        };
+
+        expect(calculateTotalLateFees(memberRecord)).toBe(0);
+    });
+
+    test('should calculate correctly for a single overdue book', () => {
+        const memberRecord = {
+            overdueBooks: [
+                { daysLate: 4 }
+            ]
+        };
+
+        expect(calculateTotalLateFees(memberRecord)).toBe(4 * LATE_FEE_PER_DAY);
+    });
+});
 
 describe('utils functions', () => {   
 
