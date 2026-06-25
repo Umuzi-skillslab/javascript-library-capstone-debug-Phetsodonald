@@ -41,7 +41,7 @@ function verifyString(...strings){
     });
 }
 
-function checkMember(memberId) {
+function checkMemberExists(memberId) {
     verifyString(memberId);
     const memberExists = members.some(member => member.id === memberId);
 
@@ -176,7 +176,7 @@ function addMultipleMembers(...membersArr) {
         if (!member || typeof member !== 'object' || !member.id) {
             throw new Error(ERROR_MESSAGES.instanceError("Member"));
         }
-        checkMember(member.id)
+        checkMemberExists(member.id)
         members.push(member);
     });
 }
@@ -254,7 +254,7 @@ module.exports = {
     updateMemberInfo,
     calculateFineAmount,
     calculateTotalLateFees,
-    checkMember,
+    checkMemberExists,
     combineBookCollections, 
     addMultipleBooks,
     addMultipleMembers,

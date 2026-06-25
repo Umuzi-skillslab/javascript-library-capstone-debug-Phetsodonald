@@ -10,7 +10,7 @@ const { findBookByISBN,
         getBooksByAuthor, 
         calculateFineAmount, 
         addMultipleMembers, 
-        checkMember, 
+        checkMemberExists, 
         verifyObject, 
         verifyArray, 
         verifyMap, 
@@ -416,7 +416,7 @@ describe('calculateFineAmount function', () => {
     });
 
     test('should return false when member does not exist', () => {
-        const result = checkMember('member12390');
+        const result = checkMemberExists('member12390');
 
         expect(result).toBe(false);
     });
@@ -548,9 +548,12 @@ describe('combineBookCollections',() =>{
 });
 
 describe('addMultipleBooks', () => {
-    
-    test('should add book to the books storage', () => {
+    beforeEach(()=>{
         books.clear();
+    });
+
+    test('should add book to the books storage', () => {
+       
         const book1 = new Book('978-0-123', 'Ice and Fire', 'Phetso', 2020, 5, 'fiction');
         const book2 = new Book('928-0-523', 'Story of Mary', 'Phetso', 2010, 5, 'nonFiction');
         const book3 = new Book('930-0-183', 'Eddie', 'Phetso', 2017, 5, 'fiction');
@@ -567,10 +570,31 @@ describe('addMultipleBooks', () => {
 
     test('should throw an error if ther is duplicate ISBN', () => {
         const book1 = new Book('978-0-123', 'Ice and Fire', 'Phetso', 2020, 5, 'fiction');
-        expect(() => {   
-             addMultipleBooks(book1);
-        }).toThrowError(ERROR_MESSAGES.isbnDuplicateError(book1.isbn))
+        const book2 = new Book('978-0-123', 'Ice and Fire', 'Phetso', 2020, 5, 'fiction');
+        expect(() => {
+             addMultipleBooks(book1, book2);
+        }).toThrowError(ERROR_MESSAGES.isbnDuplicateError('978-0-123'))
     })
+});
+
+describe('addMultipleMembers', () => {
+    beforeEach(() => {
+        members.length = 0;
+    });
+
+    test('should add new members to the member array', () => {
+        const membe1 = new Member('member1', 'John Doe', 'john@example.com', 'standard');
+        const member2 = new Member('member2', 'Jane Doe', 'jane@example.com', 'standard');
+
+        addMultipleMembers(membe1, member2);
+        expect(members.length).toBe(2);
+    });
+     
+    test('should throw an error if invalid value is passed', () => {
+        expect(() => {
+            addMultipleMembers(true);
+        }).toThrowError(ERROR_MESSAGES.instanceError('Member'));
+    });
 })
 
 describe('utils functions', () => {   
@@ -604,7 +628,7 @@ describe('utils functions', () => {
         addMultipleMembers(member);
 
         expect(() => {
-            checkMember('member12390');
+            checkMemberExists('member12390');
         }).toThrowError(
             ERROR_MESSAGES.idDuplicateError('member12390')
         );
