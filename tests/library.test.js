@@ -18,6 +18,7 @@ const { findBookByISBN,
         combineBookCollections,
         searchBooksByCategory,
         updateMemberInfo,
+        findMemberById,
         borrowBook} = require('../src/utils');
 
 describe('Book Class', () => {
@@ -643,7 +644,33 @@ describe('borrowBook', () => {
     test('should return false if the member or book is not found', () => {
         expect(borrowBook('member999', '978-9-999')).toBe(false);
     });
-})
+});
+
+describe('findMemberById', () => {
+    test('should find a member with an ID', () => {
+        members.length = 0;
+        const member1 = new Member('member1', 'John Doe', 'john@example.com', 'standard');
+             
+        addMultipleMembers(member1);
+        const results = findMemberById('member1');
+
+        expect(results.name).toBe('John Doe');
+        expect(results.email).toBe('john@example.com');
+        expect(results.membershipType).toBe('standard');
+    });
+
+    test('should throw an error if invalid value if passed', () => {
+        expect(() => {
+            findMemberById(1234);
+        }).toThrowError(ERROR_MESSAGES.invalidString(1234));
+    });
+
+    test('should throw an error if an invalid ID is passed', () => {
+        expect(() => {
+            findMemberById('12345')
+        }).toThrowError(ERROR_MESSAGES.invalidId('12345'))
+    })
+});
 
 describe('utils functions', () => {   
 
