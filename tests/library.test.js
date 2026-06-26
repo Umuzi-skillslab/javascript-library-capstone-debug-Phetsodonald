@@ -17,7 +17,8 @@ const { findBookByISBN,
         calculateTotalLateFees,
         combineBookCollections,
         searchBooksByCategory,
-        updateMemberInfo} = require('../src/utils');
+        updateMemberInfo,
+        borrowBook} = require('../src/utils');
 
 describe('Book Class', () => {
     // HAPPY TESTS
@@ -618,6 +619,31 @@ describe('updateMemberInfo', () => {
         }).toThrowError(ERROR_MESSAGES.invalidObject);
     })
 });
+
+
+describe('borrowBook', () => {
+
+    beforeEach(() => {
+        books.clear();
+        members.length = 0;
+    });
+
+    test('should borrow book with book ISBN and member ID', () => {
+
+        const book1 = new Book('978-0-123', 'Ice and Fire', 'Phetso', 2020, 5, 'fiction');
+        const member1 = new Member('member1', 'John Doe', 'john@example.com', 'standard');
+        
+        addMultipleBooks(book1);
+        addMultipleMembers(member1);
+        expect(borrowBook(member1.id, book1.isbn)).toBe(true);
+        expect(member1.borrowedBooks.length).toBe(1);
+        expect(book1.availableCopies).toBe(4);
+    });
+
+    test('should return false if the member or book is not found', () => {
+        expect(borrowBook('member999', '978-9-999')).toBe(false);
+    });
+})
 
 describe('utils functions', () => {   
 
