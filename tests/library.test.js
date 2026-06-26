@@ -16,7 +16,8 @@ const { findBookByISBN,
         verifyMap, 
         calculateTotalLateFees,
         combineBookCollections,
-        searchBooksByCategory} = require('../src/utils');
+        searchBooksByCategory,
+        updateMemberInfo} = require('../src/utils');
 
 describe('Book Class', () => {
     // HAPPY TESTS
@@ -595,7 +596,28 @@ describe('addMultipleMembers', () => {
             addMultipleMembers(true);
         }).toThrowError(ERROR_MESSAGES.instanceError('Member'));
     });
-})
+});
+
+describe('updateMemberInfo', () => {
+    test('should update a member information', () => {
+        const membe1 = new Member('member1', 'John Doe', 'john@example.com', 'standard');
+        const updates = {
+            name: "Phetso",
+            email: "phetso@gmail.com",
+            membershipType: "Premium"
+        };
+        updateMemberInfo(membe1, updates);
+        expect(membe1.name).toBe("Phetso");
+        expect(membe1.email).toBe("phetso@gmail.com");
+        expect(membe1.membershipType).toBe("Premium");
+    });
+
+    test('should throw an error if an invalid value is passed.', () => {
+        expect(() => { 
+            updateMemberInfo(false)
+        }).toThrowError(ERROR_MESSAGES.invalidObject);
+    })
+});
 
 describe('utils functions', () => {   
 
