@@ -672,6 +672,32 @@ describe('findMemberById', () => {
     })
 });
 
+describe('findBookByISBN', () => {
+    test('should find a book by ISBN', () => {
+        books.clear();
+        const book1 = new Book('978-0-123', 'Ice and Fire', 'Phetso', 2020, 5, 'fiction');
+        addMultipleBooks(book1);
+        const results = findBookByISBN('978-0-123');
+
+        expect(results.title).toBe('Ice and Fire');
+        expect(results.author).toBe('Phetso');
+        expect(results.year).toBe(2020);
+        expect(results.availableCopies).toBe(5);
+    });
+
+    test('should throw an error if invalid value if passed', () => {
+        expect(() => {
+            findBookByISBN(1234);
+        }).toThrowError(ERROR_MESSAGES.invalidString(1234));
+    });
+
+    test('should throw an error if an invalid ISBN is passed', () => {
+        expect(() => {
+            findBookByISBN('12345')
+        }).toThrowError(ERROR_MESSAGES.invalidIsbn('12345'))
+    })
+})
+
 describe('utils functions', () => {   
 
     test('should throw an error if invalid value is passed to verifyObject function.', () => {
