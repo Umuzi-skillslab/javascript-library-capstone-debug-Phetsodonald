@@ -1,18 +1,20 @@
-// Library UI - DOM Manipulation with Complex Errors
-
-// Missing: proper initialization with DOMContentLoaded
 let catalogueContainer;
 let searchInput;
 let filterDropdown;
 
-function initializeU(){
-    // Wrong selector syntax
+document.addEventListener("DOMContentLoaded", initializeUI);
+
+function initializeUI() {
     catalogueContainer = document.querySelector("#catalogue-list");
     searchInput = document.getElementById("search");
-    filterDropdown = document.querySelector("#filter-category");  // Missing #
-    
-    // Missing: null checks
-    
+    filterDropdown = document.querySelector("#filter-category");
+
+    // Check that all required elements exist
+    if (!catalogueContainer || !searchInput || !filterDropdown) {
+        console.error("Required DOM elements not found.");
+        return;
+    }
+
     setupEventListeners();
     loadCatalogue();
 }
