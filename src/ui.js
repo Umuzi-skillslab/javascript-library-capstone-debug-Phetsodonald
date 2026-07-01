@@ -19,10 +19,10 @@ function initializeUI() {
 }
 
 function setupEventListeners() {
-    // Missing: search input event listener
     
-    // Wrong event type
-    filterDropdown.addEventListener("click", handleFilterChange);
+    searchInput.addEventListener("input", handleSearch);
+
+    filterDropdown.addEventListener("change", handleFilterChange);
     
     // Missing: form submission prevention
     let borrowForm = document.getElementById("borrow-form");
