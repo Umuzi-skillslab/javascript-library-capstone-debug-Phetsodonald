@@ -5,11 +5,11 @@ let catalogueContainer;
 let searchInput;
 let filterDropdown;
 
-function initializeUI() {
+function initializeU(){
     // Wrong selector syntax
     catalogueContainer = document.querySelector("#catalogue-list");
     searchInput = document.getElementById("search");
-    filterDropdown = document.querySelector("filter-category");  // Missing #
+    filterDropdown = document.querySelector("#filter-category");  // Missing #
     
     // Missing: null checks
     
