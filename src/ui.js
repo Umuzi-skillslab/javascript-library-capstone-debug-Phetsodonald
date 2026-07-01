@@ -2,7 +2,7 @@ let catalogueContainer;
 let searchInput;
 let filterDropdown;
 
-document.addEventListener("DOMContentLoaded", initializeUI);
+
 
 function initializeUI() {
     catalogueContainer = document.querySelector("#catalogue-list");
@@ -11,8 +11,7 @@ function initializeUI() {
 
     // Check that all required elements exist
     if (!catalogueContainer || !searchInput || !filterDropdown) {
-        console.error("Required DOM elements not found.");
-        return;
+        throw new Error("Required DOM elements not found.");
     }
 
     setupEventListeners();
@@ -226,5 +225,4 @@ function createMemberForm() {
     formContainer.appendChild(form);
 }
 
-// Initialize on wrong event
-initializeUI();  // Wrong: should wait for DOMContentLoaded
+document.addEventListener("DOMContentLoaded", initializeUI);
