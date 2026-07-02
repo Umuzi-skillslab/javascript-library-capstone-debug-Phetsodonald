@@ -329,19 +329,32 @@ function displayBookDetails(isbn) {
     return true;
 }
 
-// Statistics display with errors
 function updateStatisticsDisplay() {
-    // Wrong selector methods
-    let totalBooksEl = document.querySelector(".total-books");
-    let totalMembersEl = document.querySelector(".total-members");
-    
-    // Missing: null checks
-    // Should use textContent instead of innerHTML for text
-    
-    totalBooksEl.innerHTML = books.length;
-    totalMembersEl.innerHTML = members.length;
-    
-    // Missing: update other statistics
+    const totalBooksEl = document.querySelector(".total-books");
+    const totalMembersEl = document.querySelector(".total-members");
+
+    if (totalBooksEl) {
+        totalBooksEl.textContent = books.size;
+    }
+
+    if (totalMembersEl) {
+        totalMembersEl.textContent = members.length;
+    }
+
+    // Example of additional statistics
+    const availableBooksEl = document.querySelector(".available-books");
+    if (availableBooksEl) {
+        const availableBooks = [...books.values()]
+            .filter(book => book.availableCopies > 0).length;
+        availableBooksEl.textContent = availableBooks;
+    }
+
+    const borrowedBooksEl = document.querySelector(".borrowed-books");
+    if (borrowedBooksEl) {
+        const borrowedBooks = [...books.values()]
+            .filter(book => book.availableCopies < book.totalCopies).length;
+        borrowedBooksEl.textContent = borrowedBooks;
+    }
 }
 
 // Dynamic form generation with errors
