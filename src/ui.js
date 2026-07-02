@@ -171,15 +171,58 @@ function exportLibraryData() {
     }
 }
 
-// Function missing JSON parsing
 function importLibraryData(jsonString) {
-    // Missing: try-catch for JSON.parse
-    // Missing: validation of parsed data
-    
-    let data = JSON.parse(jsonString);
-    
-    books = data.books;
-    members = data.members;
+    try {
+        const data = JSON.parse(jsonString);
+
+        if (
+            !data ||
+            !Array.isArray(data.books) ||
+            !Array.isArray(data.members)
+        ) {
+            throw new Error("Invalid library data format.");
+        }
+
+        books.clear();
+
+        for (const bookData of data.books) {
+            const book = new Book(
+                bookData.isbn,
+                bookData.title,
+                bookData.author,
+                bookData.year,
+                bookData.totalCopies,
+                bookData.category
+            );
+
+            book.availableCopies = bookData.availableCopies;
+            book.checkedOut = bookData.checkedOut || [];
+
+            books.set(book.isbn, book);
+        }
+
+        members.length = 0;
+
+        for (const memberData of data.members) {
+            const member = new Member(
+                memberData.id,
+                memberData.name,
+                memberData.email,
+                memberData.membershipType
+            );
+
+            member.borrowedBooks = memberData.borrowedBooks || [];
+            member.fines = memberData.fines || 0;
+
+            members.push(member);
+        }
+
+        console.log("Library data imported successfully.");
+        return true;
+    } catch (error) {
+        console.error("Failed to import library data:", error);
+        return false;
+    }
 }
 
 // LocalStorage functions with errors
