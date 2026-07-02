@@ -341,7 +341,7 @@ function updateStatisticsDisplay() {
         totalMembersEl.textContent = members.length;
     }
 
-    // Example of additional statistics
+    
     const availableBooksEl = document.querySelector(".available-books");
     if (availableBooksEl) {
         const availableBooks = [...books.values()]
@@ -357,27 +357,88 @@ function updateStatisticsDisplay() {
     }
 }
 
-// Dynamic form generation with errors
 function createMemberForm() {
-    let formContainer = document.getElementById("member-form");
-    
-    // Inefficient DOM manipulation
-    let form = document.createElement("form");
-    
-    let nameInput = document.createElement("input");
+    const formContainer = document.getElementById("member-form");
+
+    if (!formContainer) {
+        return;
+    }
+
+    // Prevent duplicate forms
+    formContainer.innerHTML = "";
+
+    const form = document.createElement("form");
+
+    // Name
+    const nameLabel = document.createElement("label");
+    nameLabel.setAttribute("for", "name");
+    nameLabel.textContent = "Name";
+
+    const nameInput = document.createElement("input");
     nameInput.type = "text";
     nameInput.id = "name";
-    // Missing: label, placeholder, required attribute
-    
-    let emailInput = document.createElement("input");
-    emailInput.type = "text";  // Should be "email"
+    nameInput.name = "name";
+    nameInput.placeholder = "Enter full name";
+    nameInput.required = true;
+
+    // Email
+    const emailLabel = document.createElement("label");
+    emailLabel.setAttribute("for", "email");
+    emailLabel.textContent = "Email";
+
+    const emailInput = document.createElement("input");
+    emailInput.type = "email";
     emailInput.id = "email";
-    
-    // Missing: other form fields
-    
-    form.appendChild(nameInput);
-    form.appendChild(emailInput);
-    
+    emailInput.name = "email";
+    emailInput.placeholder = "Enter email address";
+    emailInput.required = true;
+
+    // Member ID
+    const memberIdLabel = document.createElement("label");
+    memberIdLabel.setAttribute("for", "member-id");
+    memberIdLabel.textContent = "Member ID";
+
+    const memberIdInput = document.createElement("input");
+    memberIdInput.type = "text";
+    memberIdInput.id = "member-id";
+    memberIdInput.name = "memberId";
+    memberIdInput.placeholder = "Enter member ID";
+    memberIdInput.required = true;
+
+    // Membership Type
+    const membershipLabel = document.createElement("label");
+    membershipLabel.setAttribute("for", "membership-type");
+    membershipLabel.textContent = "Membership Type";
+
+    const membershipSelect = document.createElement("select");
+    membershipSelect.id = "membership-type";
+    membershipSelect.name = "membershipType";
+    membershipSelect.required = true;
+
+    ["Standard", "Premium"].forEach(type => {
+        const option = document.createElement("option");
+        option.value = type.toLowerCase();
+        option.textContent = type;
+        membershipSelect.appendChild(option);
+    });
+
+    // Submit button
+    const submitButton = document.createElement("button");
+    submitButton.type = "submit";
+    submitButton.textContent = "Add Member";
+
+    form.append(
+        nameLabel,
+        nameInput,
+        emailLabel,
+        emailInput,
+        memberIdLabel,
+        memberIdInput,
+        membershipLabel,
+        membershipSelect,
+        submitButton
+    );
+
     formContainer.appendChild(form);
 }
 
