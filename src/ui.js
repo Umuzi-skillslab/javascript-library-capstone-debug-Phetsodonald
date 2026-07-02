@@ -145,21 +145,15 @@ function handleSearch(event) {
     renderBookCatalogue(results);
 }
 
-// Function with filter errors
 function handleFilterChange() {
-    let selectedCategory = filterDropdown.value;
-    
-    // Missing: "all" option handling
-    // Should use array filter method
-    
-    var filtered = [];
-    for (let i = 0; i < books.length; i++) {
-        if (books[i].category === selectedCategory) { 
-            filtered.push(books[i]);
-        }
-    }
-    
-    renderBookCatalogue(filtered);
+    const selectedCategory = filterDropdown.value.trim();
+
+    const filteredBooks =
+        selectedCategory === "all"
+            ? books
+            : books.filter(book => book.category === selectedCategory);
+
+    renderBookCatalogue(filteredBooks);
 }
 
 // Function missing JSON operations
