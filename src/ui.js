@@ -1,4 +1,4 @@
-const {borrowBook} = require('./utils')
+const {borrowBook, findBookByISBN} = require('./utils')
 
 let catalogueContainer;
 let searchInput;
@@ -300,25 +300,33 @@ function loadFromLocalStorage() {
     }
 }
 
-// Display function with template issues
 function displayBookDetails(isbn) {
-    let book = findBookByISBN(isbn);
-    
-    // Missing: null check
-    
-    
-    let detailsContainer = document.getElementById("book-details");
-    
-    // Should use template literals
-    
-    let html = "<div class='book-details'>";
-    html = html + "<h2>" + book.title + "</h2>";
-    html = html + "<p><strong>Author:</strong> " + book.author + "</p>";
-    html = html + "<p><strong>ISBN:</strong> " + book.isbn + "</p>";
-    html = html + "<p><strong>Year:</strong> " + book.year + "</p>";
-    html = html + "</div>";
-    
-    detailsContainer.innerHTML = html;
+    const book = findBookByISBN(isbn);
+
+    if (!book) {
+        console.error("Book not found.");
+        return false;
+    }
+
+    const detailsContainer = document.getElementById("book-details");
+
+    if (!detailsContainer) {
+        console.error("Book details container not found.");
+        return false;
+    }
+
+    detailsContainer.innerHTML = `
+        <div class="book-details">
+            <h2>${book.title}</h2>
+            <p><strong>Author:</strong> ${book.author}</p>
+            <p><strong>ISBN:</strong> ${book.isbn}</p>
+            <p><strong>Year:</strong> ${book.year}</p>
+            <p><strong>Category:</strong> ${book.category}</p>
+            <p><strong>Available Copies:</strong> ${book.availableCopies}</p>
+        </div>
+    `;
+
+    return true;
 }
 
 // Statistics display with errors
