@@ -1,3 +1,5 @@
+const {borrowBook} = require('./utils')
+
 let catalogueContainer;
 let searchInput;
 let filterDropdown;
@@ -71,27 +73,37 @@ function renderBookCatalogue(bookList) {
     catalogueContainer.appendChild(fragment);
 }
 
-// Function with event handling errors
 function handleBorrowSubmit(event) {
-    // Missing: event.preventDefault()
-    
-    let memberIdInput = document.getElementById("member-id");
-    let isbnInput = document.getElementById("isbn");
-    
-    let memberId = memberIdInput.value;
-    let isbn = isbnInput.value;
-    
-    // Missing: input validation 
-    // Missing: error handling
-    
-    let success = borrowBook(memberId, isbn);
-    
-    // Poor user feedback
-    if (success) {
-        alert("Book borrowed successfully");
+    // Prevent page refresh
+    event.preventDefault();
+
+    const memberIdInput = document.getElementById("member-id");
+    const isbnInput = document.getElementById("isbn");
+
+    const memberId = memberIdInput.value.trim();
+    const isbn = isbnInput.value.trim();
+
+    // Validate inputs
+    if (!memberId || !isbn) {
+        alert("Please enter both Member ID and ISBN.");
+        return;
     }
-    
-    // Missing: form reset
+
+    try {
+        const success = borrowBook(memberId, isbn);
+
+        if (success) {
+            alert("Book borrowed successfully.");
+
+            // Reset the form
+            event.target.reset();
+        } else {
+            alert("Unable to borrow the book. Please check the Member ID, ISBN, or book availability.");
+        }
+    } catch (error) {
+        console.error("Borrow operation failed:", error);
+        alert("An unexpected error occurred. Please try again later.");
+    }
 }
 
 // Function missing event delegation
