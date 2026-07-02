@@ -225,13 +225,24 @@ function importLibraryData(jsonString) {
     }
 }
 
-// LocalStorage functions with errors
 function saveToLocalStorage() {
-    // Missing: error handling for localStorage
-    // Missing: JSON.stringify
-    
-    localStorage.setItem("libraryBooks", books);
-    localStorage.setItem("libraryMembers", members);
+    try {
+        localStorage.setItem(
+            "libraryBooks",
+            JSON.stringify([...books.values()])
+        );
+
+        localStorage.setItem(
+            "libraryMembers",
+            JSON.stringify(members)
+        );
+
+        console.log("Library data saved successfully.");
+        return true;
+    } catch (error) {
+        console.error("Failed to save library data:", error);
+        return false;
+    }
 }
 
 function loadFromLocalStorage() {
