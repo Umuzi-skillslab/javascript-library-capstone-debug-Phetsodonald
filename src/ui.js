@@ -246,15 +246,58 @@ function saveToLocalStorage() {
 }
 
 function loadFromLocalStorage() {
-    // Missing: null check
-    // Missing: JSON.parse
-    // Missing: error handling
-    
-    let booksData = localStorage.getItem("libraryBooks");
-    let membersData = localStorage.getItem("libraryMembers");
-    
-    books = booksData;
-    members = membersData;
+    try {
+        const booksData = localStorage.getItem("libraryBooks");
+        const membersData = localStorage.getItem("libraryMembers");
+
+        if (!booksData || !membersData) {
+            return false;
+        }
+
+        const parsedBooks = JSON.parse(booksData);
+        const parsedMembers = JSON.parse(membersData);
+
+        books.clear();
+
+        for (const bookData of parsedBooks) {
+            const book = new Book(
+                bookData.isbn,
+                bookData.title,
+                bookData.author,
+                bookData.year,
+                bookData.totalCopies,
+                bookData.category
+            );
+
+            book.availableCopies = bookData.availableCopies;
+            book.checkedOut = bookData.checkedOut || [];
+
+            books.set(book.isbn, book);
+        }
+
+        members.length = 0;
+
+        for (const memberData of parsedMembers) {
+            const member = new Member(
+                memberData.id,
+                memberData.name,
+                memberData.email,
+                memberData.membershipType
+            );
+
+            member.borrowedBooks = memberData.borrowedBooks || [];
+            member.fines = memberData.fines || 0;
+
+            members.push(member);
+        }
+
+        console.log("Library data loaded successfully.");
+        return true;
+
+    } catch (error) {
+        console.error("Failed to load library data:", error);
+        return false;
+    }
 }
 
 // Display function with template issues
