@@ -106,14 +106,24 @@ function handleBorrowSubmit(event) {
     }
 }
 
-// Function missing event delegation
 function handleBookClick(event) {
-    // Should use event.target properly
-    // Missing: closest() for event delegation
-    
-    let bookElement = event.target;
-    let bookId = bookElement.id;
-    
+    // Find the nearest book card that was clicked
+    const bookElement = event.target.closest(".book-card");
+
+    // Ignore clicks outside of a book card
+    if (!bookElement) {
+        return;
+    }
+
+    // Get the book ID from the data attribute
+    const bookId = bookElement.dataset.bookId;
+
+    // Validate the ID
+    if (!bookId) {
+        console.error("Book ID not found.");
+        return;
+    }
+
     displayBookDetails(bookId);
 }
 
