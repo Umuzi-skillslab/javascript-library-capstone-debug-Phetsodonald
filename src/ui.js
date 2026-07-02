@@ -156,18 +156,19 @@ function handleFilterChange() {
     renderBookCatalogue(filteredBooks);
 }
 
-// Function missing JSON operations
 function exportLibraryData() {
-    // Should convert to JSON
-    // Missing: error handling
-    
-    let data = {
-        books: books,
-        members: members
-    };
-    
-    // Missing: JSON.stringify
-    return data;
+    try {
+        const data = {
+            books,
+            members
+        };
+
+        // Convert the data to a formatted JSON string
+        return JSON.stringify(data, null, 2);
+    } catch (error) {
+        console.error("Failed to export library data:", error);
+        return null;
+    }
 }
 
 // Function missing JSON parsing
