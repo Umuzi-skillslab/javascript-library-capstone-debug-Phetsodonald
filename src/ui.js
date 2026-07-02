@@ -24,11 +24,20 @@ function setupEventListeners() {
 
     filterDropdown.addEventListener("change", handleFilterChange);
     
-    // Missing: form submission prevention
-    let borrowForm = document.getElementById("borrow-form");
-    borrowForm.addEventListener("submit", handleBorrowSubmit);
+    const borrowForm = document.getElementById("borrow-form");
+    if(borrowForm){
+        borrowForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            handleBorrowSubmit(event);
+        });
+    }
     
     // Missing: event delegation for dynamic elements
+    catalogueContainer.addEventListener("click", (event) => {
+        if(event.target.matches(".borrow-btn")){
+            handleBorrowClick(event); 
+        }
+    })
 }
 
 // Complex DOM rendering with errors
