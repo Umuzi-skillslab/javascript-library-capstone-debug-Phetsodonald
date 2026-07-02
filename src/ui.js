@@ -9,7 +9,7 @@ function initializeUI() {
     searchInput = document.getElementById("search");
     filterDropdown = document.querySelector("#filter-category");
 
-    // Check that all required elements exist
+    // Check that all required elements exist 
     if (!catalogueContainer || !searchInput || !filterDropdown) {
         throw new Error("Required DOM elements not found.");
     }
@@ -32,7 +32,6 @@ function setupEventListeners() {
         });
     }
     
-    // Missing: event delegation for dynamic elements
     catalogueContainer.addEventListener("click", (event) => {
         if(event.target.matches(".borrow-btn")){
             handleBorrowClick(event); 
@@ -40,25 +39,36 @@ function setupEventListeners() {
     })
 }
 
-// Complex DOM rendering with errors
 function renderBookCatalogue(bookList) {
-    // Should clear container first
-    
-    // Inefficient - should use DocumentFragment or template literals
-    for (let i = 0; i < bookList.length; i++) {
-        let bookCard = document.createElement("div");
+    // Clear existing content
+    catalogueContainer.innerHTML = "";
+
+    // Reduce DOM reflows
+    const fragment = document.createDocumentFragment();
+
+    bookList.forEach(book => {
+        const bookCard = document.createElement("div");
         bookCard.className = "book-card";
-        
-        // Should use template literals and data attributes
-        bookCard.innerHTML = "<h3>" + bookList[i].title + "</h3>";
-        bookCard.innerHTML = bookCard.innerHTML + "<p>Author: " + bookList[i].author + "</p>";
-        bookCard.innerHTML = bookCard.innerHTML + "<p>Available: " + bookList[i].availableCopies + "</p>";
-        
-        // Missing: unique ID or data attribute for book
-        // Missing: event listener for book selection
-        
-        catalogueContainer.appendChild(bookCard);
-    }
+
+        // Store the book ID
+        bookCard.dataset.bookId = book.id;
+
+        // Build the card
+        bookCard.innerHTML = `
+            <h3>${book.title}</h3>
+            <p><strong>Author:</strong> ${book.author}</p>
+            <p><strong>Available:</strong> ${book.availableCopies}</p>
+        `;
+
+        // Book selection event
+        bookCard.addEventListener("click", () => {
+            selectBook(book);
+        });
+
+        fragment.appendChild(bookCard);
+    });
+
+    catalogueContainer.appendChild(fragment);
 }
 
 // Function with event handling errors
