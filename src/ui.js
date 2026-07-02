@@ -127,19 +127,21 @@ function handleBookClick(event) {
     displayBookDetails(bookId);
 }
 
-// Search function with errors
 function handleSearch(event) {
-    let searchTerm = event.target.value;
-    
-    // Case-sensitive search - should use toLowerCase()
-    // Inefficient filtering
-    let results = [];
-    for (let i = 0; i < books.length; i++) {
-        if (books[i].title.includes(searchTerm)) {
-            results.push(books[i]);
-        }
+    // Normalize the search term
+    const searchTerm = event.target.value.trim().toLowerCase();
+
+    // Show all books if the search box is empty
+    if (searchTerm === "") {
+        renderBookCatalogue(books);
+        return;
     }
-    
+
+    // Filter books by title (case-insensitive)
+    const results = books.filter(book =>
+        book.title.toLowerCase().includes(searchTerm)
+    );
+
     renderBookCatalogue(results);
 }
 
