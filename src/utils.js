@@ -1,5 +1,5 @@
-const { books, members } = require('./storage');
-const {LATE_FEE_PER_DAY} = require('./constants')
+import { books, members } from'./storage';
+import {LATE_FEE_PER_DAY} from './constants';
 
 const ERROR_MESSAGES = {
     invalidString: value =>  `Expected a string value: ${value}`,
@@ -240,7 +240,7 @@ function findBookByISBN(isbn) {
     return book;
 }
 
-module.exports = {
+export {
     findBookByISBN,
     findMemberById,
     findOverdueBooks,

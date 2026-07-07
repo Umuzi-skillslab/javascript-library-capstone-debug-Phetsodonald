@@ -1,7 +1,9 @@
-const { books, members } = require('../src/storage');
-const {LATE_FEE_PER_DAY} = require('../src/constants');
-const { Book, Member, PremiumMember, DigitalBook, LibraryStats } = require('../src/library');
-const { findBookByISBN,
+import {jest} from '@jest/globals'
+import { books, members } from '../src/storage';
+import {LATE_FEE_PER_DAY} from'../src/constants';
+import { Book, Member, PremiumMember, DigitalBook } from '../src/library';
+import {LibraryStats} from '../src/libraryStats.js'
+import { findBookByISBN,
         addMultipleBooks, 
         findOverdueBooks, 
         processReturnQueue, 
@@ -19,7 +21,7 @@ const { findBookByISBN,
         searchBooksByCategory,
         updateMemberInfo,
         findMemberById,
-        borrowBook} = require('../src/utils');
+        borrowBook} from'../src/utils';
 
 describe('Book Class', () => {
     // HAPPY TESTS

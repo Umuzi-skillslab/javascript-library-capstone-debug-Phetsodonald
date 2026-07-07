@@ -1,4 +1,4 @@
-const {borrowBook, findBookByISBN} = require('./utils')
+import {borrowBook, findBookByISBN} from './utils';
 
 let catalogueContainer;
 let searchInput;
@@ -159,7 +159,7 @@ function handleFilterChange() {
 function exportLibraryData() {
     try {
         const data = {
-            books,
+            books: [...books.values],
             members
         };
 

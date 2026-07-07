@@ -1,0 +1,43 @@
+{
+    "books": [
+        {
+            "isbn": "978-0-123456-47-2",
+            "title": "The Great Gatsby",
+            "author": "F. Scott Fitzgerald",
+            "year": 1925,
+            "copies": 3,
+            "category": "fiction"
+        },
+        {
+            "isbn": "978-1-4028-9462-6",
+            "title": "Clean Code",
+            "author": "Robert C. Martin",
+            "year": 2008,
+            "copies": 5,
+            "category": "technology"
+        },
+        {
+            "isbn": "978-0-596-52068-7",
+            "title": "JavaScript: The Good Parts",
+            "author": "Douglas Crockford",
+            "year": 2008,
+            "copies": 2,
+            "category": "technology"
+        }
+    ],
+
+    "members": [
+        {
+            "id": "M001",
+            "name": "John Smith",
+            "email": "john@example.com",
+            "membershipType": "standard"
+        },
+        {
+            "id": "M002",
+            "name": "Sarah Jones",
+            "email": "sarah@example.com",
+            "membershipType": "premium"
+        }
+    ]
+}
