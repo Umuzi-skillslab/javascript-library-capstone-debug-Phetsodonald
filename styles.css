@@ -3,7 +3,7 @@
 :root{
     --primary-clr: #fff;
     --secondary-clr: #112727;
-    --accent-clr: #00a86b;
+    --accent-clr: #00a86ade;
     --padding: 0.5em;
 }
 
@@ -53,7 +53,7 @@ header > nav{
 
 header > nav > button{
     background-color: transparent;
-    color: var(--primary-clr);
+    color: var(--accent-clr);
     border: none;
     cursor: pointer;
     transition: all 0.35s ease;
@@ -61,5 +61,14 @@ header > nav > button{
 }
 
 header > nav > button:hover{
-    color: var(--accent-clr);
+    opacity: 0.5;
+}
+
+
+#book-details, 
+#borrow-section, 
+#catalogue-section,
+#member-section,
+#statistics-section{
+    display:none;
 }
