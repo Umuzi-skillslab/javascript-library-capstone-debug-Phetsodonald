@@ -1,4 +1,4 @@
-import { books, members, loadData } from "./storage";
+import { books, members, loadData } from "./storage.js";
 
 
 loadData();

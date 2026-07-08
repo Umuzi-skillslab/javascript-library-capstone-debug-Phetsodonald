@@ -1,5 +1,5 @@
-import { books, members } from'./storage';
-import {LATE_FEE_PER_DAY} from './constants';
+import { books, members } from'./storage.js';
+import {LATE_FEE_PER_DAY} from './constants.js';
 
 const ERROR_MESSAGES = {
     invalidString: value =>  `Expected a string value: ${value}`,

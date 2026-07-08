@@ -1,5 +1,5 @@
-import { verifyString, verifyNumber, formatBookInfo, updateMemberInfo } from './utils';
-import { LATE_FEE_PER_DAY, MAX_BOOKS_PER_MEMBER } from './constants';
+import { verifyString, verifyNumber, formatBookInfo, updateMemberInfo } from './utils.js';
+import { LATE_FEE_PER_DAY, MAX_BOOKS_PER_MEMBER } from './constants.js';
 
 
 

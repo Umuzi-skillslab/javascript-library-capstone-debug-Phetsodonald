@@ -1,8 +1,39 @@
-import {borrowBook, findBookByISBN} from './utils';
+import {borrowBook, findBookByISBN} from './utils.js';
 
 let catalogueContainer;
 let searchInput;
 let filterDropdown;
+
+
+const books =  [
+    {
+        "isbn": "978-0-123456-47-2",
+        "id": "56288978ji",
+        "title": "The Great Gatsby",
+        "author": "F. Scott Fitzgerald",
+        "year": 1925,
+        "copies": 3,
+        "category": "fiction"
+    },
+    {
+        "isbn": "978-1-4028-9462-6",
+        "id": "56288978ji",
+        "title": "Clean Code",
+        "author": "Robert C. Martin",
+        "year": 2008,
+        "copies": 5,
+        "category": "technology"
+    },
+    {
+        "isbn": "978-0-596-52068-7",
+        "id": "56288978ji",
+        "title": "JavaScript: The Good Parts",
+        "author": "Douglas Crockford",
+        "year": 2008,
+        "copies": 2,
+        "category": "technology"
+    }
+]
 
 
 
@@ -15,9 +46,9 @@ function initializeUI() {
     if (!catalogueContainer || !searchInput || !filterDropdown) {
         throw new Error("Required DOM elements not found.");
     }
-
+    renderBookCatalogue(books);
     setupEventListeners();
-    loadCatalogue();
+  
 }
 
 function setupEventListeners() {
@@ -52,21 +83,20 @@ function renderBookCatalogue(bookList) {
         const bookCard = document.createElement("div");
         bookCard.className = "book-card";
 
-        // Store the book ID
-        bookCard.dataset.bookId = book.id;
+        // Store the book ISBN
+        bookCard.dataset.bookISBN = book.isbn;
 
         // Build the card
         bookCard.innerHTML = `
             <h3>${book.title}</h3>
             <p><strong>Author:</strong> ${book.author}</p>
-            <p><strong>Available:</strong> ${book.availableCopies}</p>
+            <p><strong>Available:</strong> ${book.copies}</p>
         `;
 
         // Book selection event
-        bookCard.addEventListener("click", () => {
-            selectBook(book);
-        });
-
+        bookCard.addEventListener("click", (event) => {
+            handleBookClick(event)
+        })
         fragment.appendChild(bookCard);
     });
 
@@ -116,15 +146,15 @@ function handleBookClick(event) {
     }
 
     // Get the book ID from the data attribute
-    const bookId = bookElement.dataset.bookId;
+    const bookISBN = bookElement.dataset.bookISBN;
 
     // Validate the ID
-    if (!bookId) {
-        console.error("Book ID not found.");
+    if (!bookISBN) {
+        console.error("Book ISBN not found.");
         return;
     }
 
-    displayBookDetails(bookId);
+    displayBookDetails(bookISBN);
 }
 
 function handleSearch(event) {
@@ -159,7 +189,7 @@ function handleFilterChange() {
 function exportLibraryData() {
     try {
         const data = {
-            books: [...books.values],
+            books,
             members
         };
 

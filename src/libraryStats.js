@@ -1,4 +1,4 @@
-import { books, members } from'./storage';
+import { books, members } from'./storage.js';
 
 // Library Stats
 let LibraryStats = {

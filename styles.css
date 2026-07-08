@@ -5,6 +5,7 @@
     --secondary-clr: #112727;
     --accent-clr: #00a86ade;
     --padding: 0.5em;
+    --border-radius: 10px;
 }
 
 *{
@@ -67,8 +68,27 @@ header > nav > button:hover{
 
 #book-details, 
 #borrow-section, 
-#catalogue-section,
 #member-section,
 #statistics-section{
     display:none;
+}
+
+.book-grid{
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    padding: var(--padding);
+}
+
+.book-card{
+    border: 2px solid var(--secondary-clr);
+    border-radius: var(--border-radius);
+    padding: var(--padding);
+    box-shadow: 10px 10px 10px lightgray;
+    font-size: .6em;
+    background-color: var(--accent-clr);
+    color: var(gray);
+    cursor: pointer;
 }
