@@ -11,15 +11,19 @@ let borrowBookBtn;
 let borrowSection;
 let memberSection;
 let membersTab;
+let statisticsSection;
+let statisticsTab;
 
 export function initializeUI() {
     catalogueContainer = document.querySelector("#catalogue-list");
     borrowSection = document.querySelector("#borrow-section");
     memberSection = document.querySelector("#member-section");
+    statisticsSection = document.querySelector("#statistics-section");
     controls = document.querySelector(".controls");
     bookDetails = document.querySelector("#book-details");
     catalogueTab = document.querySelector("#catalogue-tab");
     membersTab = document.querySelector("#members-tab");
+    statisticsTab = document.querySelector("#statistics-tab");
     borrowBookBtn = document.querySelector("#borrow-book");
     searchInput = document.getElementById("search");
     filterDropdown = document.querySelector("#filter-category");
@@ -39,6 +43,7 @@ function setupEventListeners() {
     searchInput.addEventListener("input", handleSearch);
     catalogueTab.addEventListener("click", displayCatalogue);
     borrowBookBtn.addEventListener("click", disaplayBorrow);
+    statisticsTab.addEventListener("click", displayStatistics)
     membersTab.addEventListener("click", displayMembers);
     filterDropdown.addEventListener("change", handleFilterChange);
     
@@ -327,6 +332,7 @@ function displayCatalogue(){
     bookDetails.style.display = 'none';
     memberSection.style.display = 'none';
     borrowSection.style.display = 'none';
+    statisticsSection.style.display = 'none';
     catalogueContainer.style.display = 'grid';
     controls.style.display = 'block';
     
@@ -337,6 +343,7 @@ function disaplayBorrow(){
     catalogueContainer.style.display = 'none';
     controls.style.display = 'none';
     memberSection.style.display = 'none';
+    statisticsSection.style.display = 'none';
     borrowSection.style.display = 'block'
 }
 
@@ -345,5 +352,15 @@ function displayMembers(){
     catalogueContainer.style.display = 'none';
     controls.style.display = 'none';
     borrowSection.style.display = 'none';
+    statisticsSection.style.display = 'none';
     memberSection.style.display = 'block';
+}
+
+function displayStatistics(){
+    bookDetails.style.display = 'none';
+    catalogueContainer.style.display = 'none';
+    controls.style.display = 'none';
+    borrowSection.style.display = 'none';
+    memberSection.style.display = 'none';
+    statisticsSection.style.display = 'block';
 }
