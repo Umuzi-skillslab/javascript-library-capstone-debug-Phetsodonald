@@ -14,6 +14,7 @@ export function initializeUI() {
     if (!catalogueContainer || !searchInput || !filterDropdown) {
         throw new Error("Required DOM elements not found.");
     }
+
     renderBookCatalogue([...books.values()]);
     setupEventListeners();
   
@@ -53,12 +54,13 @@ function renderBookCatalogue(bookList) {
 
         // Store the book ISBN
         bookCard.dataset.bookISBN = book.isbn;
+        
 
         // Build the card
         bookCard.innerHTML = `
             <h3>${book.title}</h3>
             <p><strong>Author:</strong> ${book.author}</p>
-            <p><strong>Available:</strong> ${book.copies}</p>
+            <p><strong>Available:</strong> ${book.totalCopies}</p>
         `;
 
         // Book selection event
@@ -302,5 +304,3 @@ function createMemberForm() {
 
     formContainer.appendChild(form);
 }
-
-document.addEventListener("DOMContentLoaded", initializeUI);

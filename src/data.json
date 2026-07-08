@@ -1,43 +1,156 @@
 {
-    "books": [
-        {
-            "isbn": "978-0-123456-47-2",
-            "title": "The Great Gatsby",
-            "author": "F. Scott Fitzgerald",
-            "year": 1925,
-            "copies": 3,
-            "category": "fiction"
-        },
-        {
-            "isbn": "978-1-4028-9462-6",
-            "title": "Clean Code",
-            "author": "Robert C. Martin",
-            "year": 2008,
-            "copies": 5,
-            "category": "technology"
-        },
-        {
-            "isbn": "978-0-596-52068-7",
-            "title": "JavaScript: The Good Parts",
-            "author": "Douglas Crockford",
-            "year": 2008,
-            "copies": 2,
-            "category": "technology"
-        }
-    ],
-
-    "members": [
-        {
-            "id": "M001",
-            "name": "John Smith",
-            "email": "john@example.com",
-            "membershipType": "standard"
-        },
-        {
-            "id": "M002",
-            "name": "Sarah Jones",
-            "email": "sarah@example.com",
-            "membershipType": "premium"
-        }
-    ]
+  "books": [
+    {
+      "isbn": "978-0-123456-001",
+      "title": "The Great Gatsby",
+      "author": "F. Scott Fitzgerald",
+      "year": 1925,
+      "copies": 4,
+      "category": "fiction"
+    },
+    {
+      "isbn": "978-0-123456-002",
+      "title": "To Kill a Mockingbird",
+      "author": "Harper Lee",
+      "year": 1960,
+      "copies": 5,
+      "category": "fiction"
+    },
+    {
+      "isbn": "978-0-123456-003",
+      "title": "1984",
+      "author": "George Orwell",
+      "year": 1949,
+      "copies": 6,
+      "category": "fiction"
+    },
+    {
+      "isbn": "978-0-123456-004",
+      "title": "Pride and Prejudice",
+      "author": "Jane Austen",
+      "year": 1813,
+      "copies": 3,
+      "category": "fiction"
+    },
+    {
+      "isbn": "978-0-123456-005",
+      "title": "The Hobbit",
+      "author": "J.R.R. Tolkien",
+      "year": 1937,
+      "copies": 7,
+      "category": "fiction"
+    },
+    {
+      "isbn": "978-0-123456-006",
+      "title": "Sapiens",
+      "author": "Yuval Noah Harari",
+      "year": 2011,
+      "copies": 4,
+      "category": "non-fiction"
+    },
+    {
+      "isbn": "978-0-123456-007",
+      "title": "Educated",
+      "author": "Tara Westover",
+      "year": 2018,
+      "copies": 5,
+      "category": "non-fiction"
+    },
+    {
+      "isbn": "978-0-123456-008",
+      "title": "Atomic Habits",
+      "author": "James Clear",
+      "year": 2018,
+      "copies": 8,
+      "category": "non-fiction"
+    },
+    {
+      "isbn": "978-0-123456-009",
+      "title": "The Diary of a Young Girl",
+      "author": "Anne Frank",
+      "year": 1947,
+      "copies": 3,
+      "category": "non-fiction"
+    },
+    {
+      "isbn": "978-0-123456-010",
+      "title": "The Wright Brothers",
+      "author": "David McCullough",
+      "year": 2015,
+      "copies": 4,
+      "category": "non-fiction"
+    },
+    {
+      "isbn": "978-0-123456-011",
+      "title": "Oxford English Dictionary",
+      "author": "Oxford University Press",
+      "year": 2020,
+      "copies": 2,
+      "category": "reference"
+    },
+    {
+      "isbn": "978-0-123456-012",
+      "title": "Encyclopedia Britannica",
+      "author": "Encyclopaedia Britannica Editors",
+      "year": 2019,
+      "copies": 2,
+      "category": "reference"
+    },
+    {
+      "isbn": "978-0-123456-013",
+      "title": "Merriam-Webster Dictionary",
+      "author": "Merriam-Webster",
+      "year": 2021,
+      "copies": 3,
+      "category": "reference"
+    },
+    {
+      "isbn": "978-0-123456-014",
+      "title": "CRC Handbook of Chemistry and Physics",
+      "author": "John R. Rumble",
+      "year": 2023,
+      "copies": 2,
+      "category": "reference"
+    },
+    {
+      "isbn": "978-0-123456-015",
+      "title": "World Atlas",
+      "author": "National Geographic",
+      "year": 2022,
+      "copies": 5,
+      "category": "reference"
+    }
+  ],
+  "members": [
+    {
+      "id": "M001",
+      "name": "John Smith",
+      "email": "john@example.com",
+      "membershipType": "standard"
+    },
+    {
+      "id": "M002",
+      "name": "Sarah Jones",
+      "email": "sarah@example.com",
+      "membershipType": "premium"
+    },
+    {
+      "id": "M003",
+      "name": "Michael Brown",
+      "email": "michael@example.com",
+      "membershipType": "standard"
+    },
+    {
+      "id": "M004",
+      "name": "Emily Davis",
+      "email": "emily@example.com",
+      "membershipType": "premium"
+    },
+    {
+      "id": "M005",
+      "name": "David Wilson",
+      "email": "david@example.com",
+      "membershipType": "standard"
+    }
+  ]
 }

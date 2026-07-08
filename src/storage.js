@@ -1,4 +1,5 @@
 import { Book, Member } from "./library.js";
+import data from "./data.json" with {type: "json"};
 
 export const books = new Map();
 export const members = [];
@@ -38,17 +39,19 @@ export function loadFromLocalStorage() {
         books.clear();
 
         for (const bookData of parsedBooks) {
+            
             const book = new Book(
                 bookData.isbn,
                 bookData.title,
                 bookData.author,
                 bookData.year,
-                bookData.copies,
+                bookData.totalCopies,
                 bookData.category
             );
 
             book.availableCopies = bookData.availableCopies;
             book.checkedOut = bookData.checkedOut || [];
+            
 
             books.set(book.isbn, book);
         }
@@ -69,7 +72,6 @@ export function loadFromLocalStorage() {
             members.push(member);
         }
 
-        console.log("Library data loaded successfully.");
         return true;
 
     } catch (error) {
@@ -78,20 +80,14 @@ export function loadFromLocalStorage() {
     }
 }
 
-export async function loadData() {
+export function loadData() {
     try {
+
         books.clear();
         members.length = 0;
 
-        const response = await fetch("../data.json");
-
-        if (!response.ok) {
-            throw new Error("Failed to load data.json");
-        }
-
-        const data = await response.json();
-
         data.books.forEach(bookData => {
+
             const book = new Book(
                 bookData.isbn,
                 bookData.title,
@@ -104,7 +100,9 @@ export async function loadData() {
             books.set(book.isbn, book);
         });
 
+
         data.members.forEach(memberData => {
+
             const member = new Member(
                 memberData.id,
                 memberData.name,
@@ -115,10 +113,9 @@ export async function loadData() {
             members.push(member);
         });
 
-        console.log("JSON data loaded successfully.");
         return true;
 
-    } catch (error) {
+    } catch(error) {
         console.error("Failed to load data:", error);
         return false;
     }
@@ -127,7 +124,7 @@ export async function loadData() {
 function exportLibraryData() {
     try {
         const data = {
-            books,
+            books: [...books.values()],
             members
         };
 

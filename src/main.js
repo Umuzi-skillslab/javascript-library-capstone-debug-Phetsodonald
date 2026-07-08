@@ -1,16 +1,27 @@
 import { initializeUI } from "./ui.js";
-import { loadFromLocalStorage, loadData, saveToLocalStorage } from "./storage.js";
+import {
+    loadData,
+    loadFromLocalStorage,
+    saveToLocalStorage
+} from "./storage.js";
 
-async function startApp() {
+function startApp() {
+    try {
+        let loaded = loadFromLocalStorage();
 
-    const hasLocalData = loadFromLocalStorage();
+        if (!loaded) {
+            loaded = loadData();
 
-    if (!hasLocalData) {
-        await loadData();
-        saveToLocalStorage();
+            if (loaded) {
+                saveToLocalStorage();
+            }
+        }
+
+        initializeUI();
+
+    } catch (error) {
+        console.error("Failed to start application:", error);
     }
-
-    initializeUI();
 }
 
 startApp();
