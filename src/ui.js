@@ -1,41 +1,9 @@
-import {borrowBook, findBookByISBN} from './utils.js';
+import {borrowBook, findBookByISBN, searchBooksByCategory} from './utils.js';
+import { books, members } from "./storage.js";
 
 let catalogueContainer;
 let searchInput;
 let filterDropdown;
-
-
-const books =  [
-    {
-        "isbn": "978-0-123456-47-2",
-        "id": "56288978ji",
-        "title": "The Great Gatsby",
-        "author": "F. Scott Fitzgerald",
-        "year": 1925,
-        "copies": 3,
-        "category": "fiction"
-    },
-    {
-        "isbn": "978-1-4028-9462-6",
-        "id": "56288978ji",
-        "title": "Clean Code",
-        "author": "Robert C. Martin",
-        "year": 2008,
-        "copies": 5,
-        "category": "technology"
-    },
-    {
-        "isbn": "978-0-596-52068-7",
-        "id": "56288978ji",
-        "title": "JavaScript: The Good Parts",
-        "author": "Douglas Crockford",
-        "year": 2008,
-        "copies": 2,
-        "category": "technology"
-    }
-]
-
-
 
 function initializeUI() {
     catalogueContainer = document.querySelector("#catalogue-list");
@@ -46,7 +14,7 @@ function initializeUI() {
     if (!catalogueContainer || !searchInput || !filterDropdown) {
         throw new Error("Required DOM elements not found.");
     }
-    renderBookCatalogue(books);
+    renderBookCatalogue([...books.values()]);
     setupEventListeners();
   
 }
@@ -168,7 +136,7 @@ function handleSearch(event) {
     }
 
     // Filter books by title (case-insensitive)
-    const results = books.filter(book =>
+    const results = [...books.values()].filter(book =>
         book.title.toLowerCase().includes(searchTerm)
     );
 
@@ -178,10 +146,15 @@ function handleSearch(event) {
 function handleFilterChange() {
     const selectedCategory = filterDropdown.value.trim();
 
-    const filteredBooks =
-        selectedCategory === "all"
-            ? books
-            : books.filter(book => book.category === selectedCategory);
+    if (selectedCategory === "all") {
+        renderBookCatalogue([...books.values()]);
+        return;
+    }
+
+    const filteredBooks = searchBooksByCategory(
+        books,
+        selectedCategory
+    );
 
     renderBookCatalogue(filteredBooks);
 }
@@ -251,81 +224,6 @@ function importLibraryData(jsonString) {
         return true;
     } catch (error) {
         console.error("Failed to import library data:", error);
-        return false;
-    }
-}
-
-function saveToLocalStorage() {
-    try {
-        localStorage.setItem(
-            "libraryBooks",
-            JSON.stringify([...books.values()])
-        );
-
-        localStorage.setItem(
-            "libraryMembers",
-            JSON.stringify(members)
-        );
-
-        console.log("Library data saved successfully.");
-        return true;
-    } catch (error) {
-        console.error("Failed to save library data:", error);
-        return false;
-    }
-}
-
-function loadFromLocalStorage() {
-    try {
-        const booksData = localStorage.getItem("libraryBooks");
-        const membersData = localStorage.getItem("libraryMembers");
-
-        if (!booksData || !membersData) {
-            return false;
-        }
-
-        const parsedBooks = JSON.parse(booksData);
-        const parsedMembers = JSON.parse(membersData);
-
-        books.clear();
-
-        for (const bookData of parsedBooks) {
-            const book = new Book(
-                bookData.isbn,
-                bookData.title,
-                bookData.author,
-                bookData.year,
-                bookData.totalCopies,
-                bookData.category
-            );
-
-            book.availableCopies = bookData.availableCopies;
-            book.checkedOut = bookData.checkedOut || [];
-
-            books.set(book.isbn, book);
-        }
-
-        members.length = 0;
-
-        for (const memberData of parsedMembers) {
-            const member = new Member(
-                memberData.id,
-                memberData.name,
-                memberData.email,
-                memberData.membershipType
-            );
-
-            member.borrowedBooks = memberData.borrowedBooks || [];
-            member.fines = memberData.fines || 0;
-
-            members.push(member);
-        }
-
-        console.log("Library data loaded successfully.");
-        return true;
-
-    } catch (error) {
-        console.error("Failed to load library data:", error);
         return false;
     }
 }
