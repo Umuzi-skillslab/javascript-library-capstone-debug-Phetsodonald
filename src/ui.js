@@ -4,9 +4,13 @@ import { books, members } from "./storage.js";
 let catalogueContainer;
 let searchInput;
 let filterDropdown;
+let bookDetails;
+let controls;
 
 export function initializeUI() {
     catalogueContainer = document.querySelector("#catalogue-list");
+    controls = document.querySelector(".controls");
+    bookDetails = document.querySelector("#book-details");
     searchInput = document.getElementById("search");
     filterDropdown = document.querySelector("#filter-category");
 
@@ -54,7 +58,7 @@ function renderBookCatalogue(bookList) {
 
         // Store the book ISBN
         bookCard.dataset.bookISBN = book.isbn;
-        
+
 
         // Build the card
         bookCard.innerHTML = `
@@ -123,7 +127,9 @@ function handleBookClick(event) {
         console.error("Book ISBN not found.");
         return;
     }
-
+    bookDetails.style.display = 'block';
+    catalogueContainer.style.display = 'none';
+    controls.style.display = 'none';
     displayBookDetails(bookISBN);
 }
 
