@@ -6,11 +6,13 @@ let searchInput;
 let filterDropdown;
 let bookDetails;
 let controls;
+let catalogueTab
 
 export function initializeUI() {
     catalogueContainer = document.querySelector("#catalogue-list");
     controls = document.querySelector(".controls");
     bookDetails = document.querySelector("#book-details");
+    catalogueTab = document.querySelector("#catalogue-tab");
     searchInput = document.getElementById("search");
     filterDropdown = document.querySelector("#filter-category");
 
@@ -27,7 +29,7 @@ export function initializeUI() {
 function setupEventListeners() {
     
     searchInput.addEventListener("input", handleSearch);
-
+    catalogueTab.addEventListener("click", displayCatalogue);
     filterDropdown.addEventListener("change", handleFilterChange);
     
     const borrowForm = document.getElementById("borrow-form");
@@ -310,3 +312,11 @@ function createMemberForm() {
 
     formContainer.appendChild(form);
 }
+
+function displayCatalogue(){
+    bookDetails.style.display = 'none';
+    catalogueContainer.style.display = 'grid';
+    controls.style.display = 'block';
+};
+
+function disaplayBorrow(){}
