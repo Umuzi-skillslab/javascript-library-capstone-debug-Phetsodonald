@@ -13,9 +13,11 @@ let memberSection;
 let membersTab;
 let statisticsSection;
 let statisticsTab;
+let membersList;
 
 export function initializeUI() {
     catalogueContainer = document.querySelector("#catalogue-list");
+    membersList = document.querySelector("#member-list");
     borrowSection = document.querySelector("#borrow-section");
     memberSection = document.querySelector("#member-section");
     statisticsSection = document.querySelector("#statistics-section");
@@ -29,7 +31,20 @@ export function initializeUI() {
     filterDropdown = document.querySelector("#filter-category");
 
     // Check that all required elements exist 
-    if (!catalogueContainer || !searchInput || !filterDropdown) {
+    if (!catalogueContainer 
+        || !searchInput 
+        || !filterDropdown
+        || !catalogueContainer
+        || !borrowSection
+        || !memberSection
+        || !statisticsSection
+        || !controls
+        || !bookDetails
+        || !catalogueTab
+        || !membersTab
+        || !statisticsTab
+        || !borrowBookBtn
+        || !membersList) {
         throw new Error("Required DOM elements not found.");
     }
 
@@ -92,6 +107,32 @@ function renderBookCatalogue(bookList) {
     });
 
     catalogueContainer.appendChild(fragment);
+}
+
+function renderMembers(memberList){
+    membersList.innerHTML = "";
+
+     // Reduce DOM reflows
+    const fragment = document.createDocumentFragment();
+
+    memberList.forEach(member => {
+        const memberCard = document.createElement("div");
+        memberCard.className = "member-card";
+
+        // Store the book ISBN
+        memberCard.dataset.memberId = member.id;
+
+
+        // Build the card
+        memberCard.innerHTML = `
+            <h3>${member.name}</h3>
+            <p><strong>email:</strong> ${member.email}</p>
+            <p><strong>membershipType:</strong> ${member.membershipType}</p>
+        `;
+
+        fragment.appendChild(memberCard);
+    });
+    membersList.append(fragment);
 }
 
 function handleBorrowSubmit(event) {
@@ -354,6 +395,8 @@ function displayMembers(){
     borrowSection.style.display = 'none';
     statisticsSection.style.display = 'none';
     memberSection.style.display = 'block';
+    createMemberForm();
+    renderMembers(members);
 }
 
 function displayStatistics(){
