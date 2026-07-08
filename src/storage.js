@@ -123,3 +123,72 @@ export async function loadData() {
         return false;
     }
 }
+
+function exportLibraryData() {
+    try {
+        const data = {
+            books,
+            members
+        };
+
+        // Convert the data to a formatted JSON string
+        return JSON.stringify(data, null, 2);
+    } catch (error) {
+        console.error("Failed to export library data:", error);
+        return null;
+    }
+}
+
+function importLibraryData(jsonString) {
+    try {
+        const data = JSON.parse(jsonString);
+
+        if (
+            !data ||
+            !Array.isArray(data.books) ||
+            !Array.isArray(data.members)
+        ) {
+            throw new Error("Invalid library data format.");
+        }
+
+        books.clear();
+
+        for (const bookData of data.books) {
+            const book = new Book(
+                bookData.isbn,
+                bookData.title,
+                bookData.author,
+                bookData.year,
+                bookData.totalCopies,
+                bookData.category
+            );
+
+            book.availableCopies = bookData.availableCopies;
+            book.checkedOut = bookData.checkedOut || [];
+
+            books.set(book.isbn, book);
+        }
+
+        members.length = 0;
+
+        for (const memberData of data.members) {
+            const member = new Member(
+                memberData.id,
+                memberData.name,
+                memberData.email,
+                memberData.membershipType
+            );
+
+            member.borrowedBooks = memberData.borrowedBooks || [];
+            member.fines = memberData.fines || 0;
+
+            members.push(member);
+        }
+
+        console.log("Library data imported successfully.");
+        return true;
+    } catch (error) {
+        console.error("Failed to import library data:", error);
+        return false;
+    }
+}
