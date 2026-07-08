@@ -9,13 +9,17 @@ let controls;
 let catalogueTab;
 let borrowBookBtn;
 let borrowSection;
+let memberSection;
+let membersTab;
 
 export function initializeUI() {
     catalogueContainer = document.querySelector("#catalogue-list");
-    borrowSection = document.querySelector("#borrow-section")
+    borrowSection = document.querySelector("#borrow-section");
+    memberSection = document.querySelector("#member-section");
     controls = document.querySelector(".controls");
     bookDetails = document.querySelector("#book-details");
     catalogueTab = document.querySelector("#catalogue-tab");
+    membersTab = document.querySelector("#members-tab");
     borrowBookBtn = document.querySelector("#borrow-book");
     searchInput = document.getElementById("search");
     filterDropdown = document.querySelector("#filter-category");
@@ -35,6 +39,7 @@ function setupEventListeners() {
     searchInput.addEventListener("input", handleSearch);
     catalogueTab.addEventListener("click", displayCatalogue);
     borrowBookBtn.addEventListener("click", disaplayBorrow);
+    membersTab.addEventListener("click", displayMembers);
     filterDropdown.addEventListener("change", handleFilterChange);
     
     const borrowForm = document.getElementById("borrow-form");
@@ -320,14 +325,25 @@ function createMemberForm() {
 
 function displayCatalogue(){
     bookDetails.style.display = 'none';
+    memberSection.style.display = 'none';
+    borrowSection.style.display = 'none';
     catalogueContainer.style.display = 'grid';
     controls.style.display = 'block';
-    borrowSection.style.display = 'none'
+    
 };
 
 function disaplayBorrow(){
     bookDetails.style.display = 'none';
     catalogueContainer.style.display = 'none';
     controls.style.display = 'none';
+    memberSection.style.display = 'none';
     borrowSection.style.display = 'block'
+}
+
+function displayMembers(){
+    bookDetails.style.display = 'none';
+    catalogueContainer.style.display = 'none';
+    controls.style.display = 'none';
+    borrowSection.style.display = 'none';
+    memberSection.style.display = 'block';
 }
