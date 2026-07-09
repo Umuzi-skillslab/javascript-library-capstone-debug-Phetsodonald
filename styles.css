@@ -1,13 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 :root{
-    --primary-clr: #fff;
-    --secondary-clr: #112727;
-    --accent-clr: #00a86ade;
-    --padding: 0.5em;
-    --border-radius: 10px;
+    --primary: #eff4f7;
+    --surface: #efecec;
+    --secondary: #2563eb;
+    --accent: #10b981;
+    --accent-hover: #059669;
+
+    --text: #1f2937;
+    --text-light: #6b7280;
+
+    --border: #e5e7eb;
+    --shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+
+    --radius: 12px;
+    --padding: 10px;
+    --transition: .3s ease;
 }
 
+/*  reset default styles */
 *{
     padding: 0;
     margin: 0;
@@ -22,74 +33,81 @@ html{
 body{
     font-family: "Poppins", sans-serif;
     min-height: 100vh;
-    background-color: var(--primary-clr);
+    background-color: var(--surface);
 }
 
 header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--padding);
+
+    background-color: var(--primary);
+
     position: sticky;
     top: 0;
     z-index: 1000;
-    background-color: var(--secondary-clr);
-    color: var(--primary-clr);
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    padding: var(--padding);
-    min-height: 3em;
-    overflow: hidden;
 }
 
-header > h1{
-    font-size: medium;
-}
-
-header > nav{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-}
-
-header > nav > button{
-    background-color: transparent;
-    color: var(--accent-clr);
-    border: none;
+header h1{
+    color: var(--accent);
+    font-size: 1.5em;
     cursor: pointer;
-    transition: all 0.35s ease;
-    font-size: small;
 }
 
-header > nav > button:hover{
-    opacity: 0.5;
+header nav button{
+    background-color: transparent;
+    color: var(--text-light);
+    font-size: 15px;
+    cursor: pointer;
+    border: none;
+    transition: var(--transition);
 }
 
+header nav button:hover{
+    color: var(--accent-hover);
+}
 
-#book-details, 
+main{
+    padding: var(--padding);
+}
+
+#book-details,
 #borrow-section,
-#member-form,
 #member-section,
 #statistics-section{
-    display:none;
+    display: none;
 }
 
-.book-grid{
-    display: grid;
+.controls{
+    display: flex;
     align-items: center;
-    justify-content: center;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
+    justify-content: flex-start;
     padding: var(--padding);
+
+    position: sticky;
+    top: 4em;
+    gap: 5px;
 }
 
-.book-card{
-    border: 2px solid var(--secondary-clr);
-    border-radius: var(--border-radius);
-    padding: var(--padding);
-    box-shadow: 10px 10px 10px lightgray;
-    font-size: .6em;
-    background-color: var(--accent-clr);
-    color: var(gray);
-    cursor: pointer;
+input[type="text"]{
+   border: 2px solid var(--accent); 
+   border-radius: var(--radius);
+   padding: 5px;
 }
+
+.controls select{
+    background-color: var(--accent-hover);
+    color: var(--surface);
+    padding: 5px;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    outline: none;
+}
+
+.controls option{
+    background-color: var(--primary);
+    color: var(--text);
+}
+
