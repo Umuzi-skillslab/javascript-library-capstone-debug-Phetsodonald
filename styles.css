@@ -79,6 +79,10 @@ main{
     display: none;
 }
 
+#catalogue-section{
+    display:block;
+}
+
 .controls{
     display: flex;
     align-items: center;
@@ -331,6 +335,7 @@ main{
 }
 
 #member-form button{
+    display: block;
     padding: 5px;
     border: none;
     border-radius: 10px;

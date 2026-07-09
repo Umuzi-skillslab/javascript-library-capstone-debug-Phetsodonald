@@ -1,60 +1,29 @@
 import {borrowBook, findBookByISBN, searchBooksByCategory} from './utils.js';
 import { books, members } from "./storage.js";
 
-let catalogueContainer;
-let searchInput;
-let filterDropdown;
-let bookDetails;
-let controls;
-let catalogueTab;
-let borrowBookBtn;
-let borrowSection;
-let memberSection;
-let membersTab;
-let statisticsSection;
-let statisticsTab;
-let membersList;
-let createMemberToggle;
-let formContainer;
+let catalogueContainer, 
+    controls, 
+    statisticsTab, 
+    membersList, 
+    createMemberToggle, 
+    formContainer, 
+    borrowBookBtn, 
+    membersTab, 
+    statisticsSection, 
+    borrowSection, 
+    memberSection, 
+    searchInput, 
+    filterDropdown, 
+    bookDetails, 
+    catalogueTab;
+
 
 export function initializeUI() {
-    catalogueContainer = document.querySelector("#catalogue-list");
-    membersList = document.querySelector("#member-list");
-    borrowSection = document.querySelector("#borrow-section");
-    memberSection = document.querySelector("#member-section");
-    statisticsSection = document.querySelector("#statistics-section");
-    controls = document.querySelector(".controls");
-    bookDetails = document.querySelector("#book-details");
-    catalogueTab = document.querySelector("#catalogue-tab");
-    membersTab = document.querySelector("#members-tab");
-    statisticsTab = document.querySelector("#statistics-tab");
-    borrowBookBtn = document.querySelector("#borrow-book");
-    searchInput = document.getElementById("search");
-    filterDropdown = document.querySelector("#filter-category");
-    createMemberToggle = document.querySelector("#create-member");
-    formContainer = document.getElementById("member-form");
 
-    // Check that all required elements exist 
-    if (!catalogueContainer 
-        || !searchInput 
-        || !filterDropdown
-        || !catalogueContainer
-        || !borrowSection
-        || !memberSection
-        || !statisticsSection
-        || !controls
-        || !bookDetails
-        || !catalogueTab
-        || !membersTab
-        || !statisticsTab
-        || !borrowBookBtn
-        || !membersList
-        || !createMemberToggle) {
-        throw new Error("Required DOM elements not found.");
-    }
-
-    renderBookCatalogue([...books.values()]);
+    cacheDom();
+    validateDom();
     setupEventListeners();
+    renderBookCatalogue([...books.values()]);
   
 }
 
@@ -62,7 +31,7 @@ function setupEventListeners() {
     
     searchInput.addEventListener("input", handleSearch);
     catalogueTab.addEventListener("click", displayCatalogue);
-    borrowBookBtn.addEventListener("click", disaplayBorrow);
+    borrowBookBtn.addEventListener("click", displayBorrow);
     createMemberToggle.addEventListener("click", displayAddMemberForm)
     statisticsTab.addEventListener("click", displayStatistics);
     membersTab.addEventListener("click", displayMembers);
@@ -102,7 +71,7 @@ function renderBookCatalogue(bookList) {
         bookCard.innerHTML = `
             <h3>${book.title}</h3>
             <p><strong>Author:</strong> ${book.author}</p>
-            <p><strong>Available:</strong> ${book.totalCopies}</p>
+            <p><strong>Available:</strong> ${book.availableCopies}</p>
         `;
 
         // Book selection event
@@ -203,7 +172,7 @@ function handleSearch(event) {
 
     // Show all books if the search box is empty
     if (searchTerm === "") {
-        renderBookCatalogue(books);
+        renderBookCatalogue([...books.values()]);
         return;
     }
 
@@ -370,7 +339,7 @@ function createMemberForm() {
         membershipSelect,
         submitButton
     );
-
+    form.addEventListener("submit", handleCreateMember);
     formContainer.appendChild(form);
 }
 
@@ -384,7 +353,7 @@ function displayCatalogue(){
     
 };
 
-function disaplayBorrow(){
+function displayBorrow(){
     bookDetails.style.display = 'none';
     catalogueContainer.style.display = 'none';
     controls.style.display = 'none';
@@ -426,5 +395,49 @@ function displayAddMemberForm() {
         membersList.style.display = "none";
         createMemberToggle.textContent = "View Members";
         createMemberForm();
+    }
+}
+
+function handleCreateMember(event){
+    event.preventDefault()
+    
+}
+
+function cacheDom(){
+    catalogueContainer = document.querySelector("#catalogue-list");
+    membersList = document.querySelector("#member-list");
+    borrowSection = document.querySelector("#borrow-section");
+    memberSection = document.querySelector("#member-section");
+    statisticsSection = document.querySelector("#statistics-section");
+    controls = document.querySelector(".controls");
+    bookDetails = document.querySelector("#book-details");
+    catalogueTab = document.querySelector("#catalogue-tab");
+    membersTab = document.querySelector("#members-tab");
+    statisticsTab = document.querySelector("#statistics-tab");
+    borrowBookBtn = document.querySelector("#borrow-book");
+    searchInput = document.getElementById("search");
+    filterDropdown = document.querySelector("#filter-category");
+    createMemberToggle = document.querySelector("#create-member");
+    formContainer = document.getElementById("member-form");
+}
+
+function validateDom(){
+    // Check that all required elements exist 
+    if (!catalogueContainer 
+        || !searchInput 
+        || !filterDropdown
+        || !catalogueContainer
+        || !borrowSection
+        || !memberSection
+        || !statisticsSection
+        || !controls
+        || !bookDetails
+        || !catalogueTab
+        || !membersTab
+        || !statisticsTab
+        || !borrowBookBtn
+        || !membersList
+        || !createMemberToggle) {
+        throw new Error("Required DOM elements not found.");
     }
 }
