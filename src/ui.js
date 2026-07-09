@@ -14,6 +14,8 @@ let membersTab;
 let statisticsSection;
 let statisticsTab;
 let membersList;
+let createMemberToggle;
+let formContainer;
 
 export function initializeUI() {
     catalogueContainer = document.querySelector("#catalogue-list");
@@ -29,6 +31,8 @@ export function initializeUI() {
     borrowBookBtn = document.querySelector("#borrow-book");
     searchInput = document.getElementById("search");
     filterDropdown = document.querySelector("#filter-category");
+    createMemberToggle = document.querySelector("#create-member");
+    formContainer = document.getElementById("member-form");
 
     // Check that all required elements exist 
     if (!catalogueContainer 
@@ -44,7 +48,8 @@ export function initializeUI() {
         || !membersTab
         || !statisticsTab
         || !borrowBookBtn
-        || !membersList) {
+        || !membersList
+        || !createMemberToggle) {
         throw new Error("Required DOM elements not found.");
     }
 
@@ -58,7 +63,8 @@ function setupEventListeners() {
     searchInput.addEventListener("input", handleSearch);
     catalogueTab.addEventListener("click", displayCatalogue);
     borrowBookBtn.addEventListener("click", disaplayBorrow);
-    statisticsTab.addEventListener("click", displayStatistics)
+    createMemberToggle.addEventListener("click", displayAddMemberForm)
+    statisticsTab.addEventListener("click", displayStatistics);
     membersTab.addEventListener("click", displayMembers);
     filterDropdown.addEventListener("change", handleFilterChange);
     
@@ -285,7 +291,6 @@ function updateStatisticsDisplay() {
 }
 
 function createMemberForm() {
-    const formContainer = document.getElementById("member-form");
 
     if (!formContainer) {
         return;
@@ -395,7 +400,7 @@ function displayMembers(){
     borrowSection.style.display = 'none';
     statisticsSection.style.display = 'none';
     memberSection.style.display = 'block';
-    createMemberForm();
+    
     renderMembers(members);
 }
 
@@ -406,4 +411,19 @@ function displayStatistics(){
     borrowSection.style.display = 'none';
     memberSection.style.display = 'none';
     statisticsSection.style.display = 'block';
+}
+
+function displayAddMemberForm() {
+    const formVisible = formContainer.style.display === "block";
+
+    if (formVisible) {
+        formContainer.style.display = "none";
+        membersList.style.display = "block";
+        createMemberToggle.textContent = "Add Member";
+    } else {
+        formContainer.style.display = "block";
+        membersList.style.display = "none";
+        createMemberToggle.textContent = "View Members";
+        createMemberForm();
+    }
 }

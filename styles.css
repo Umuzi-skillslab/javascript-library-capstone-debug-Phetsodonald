@@ -67,7 +67,8 @@ header > nav > button:hover{
 
 
 #book-details, 
-#borrow-section, 
+#borrow-section,
+#member-form,
 #member-section,
 #statistics-section{
     display:none;
