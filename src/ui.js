@@ -411,6 +411,7 @@ function displayStatistics(){
     borrowSection.style.display = 'none';
     memberSection.style.display = 'none';
     statisticsSection.style.display = 'block';
+    updateStatisticsDisplay();
 }
 
 function displayAddMemberForm() {
