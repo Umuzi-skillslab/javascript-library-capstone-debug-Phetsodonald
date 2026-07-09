@@ -88,6 +88,7 @@ main{
     position: sticky;
     top: 4em;
     gap: 5px;
+    z-index: 100;
 }
 
 input[type="text"]{
@@ -111,3 +112,36 @@ input[type="text"]{
     color: var(--text);
 }
 
+.book-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    align-items: center;
+    justify-content: center;
+    padding: var(--padding);
+    gap: 10px;
+}
+
+.book-card{
+    background-color: var(--primary);
+    color: var(--text);
+    font-size: 15px;
+    padding: var(--padding);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius);
+
+    box-shadow: var(--shadow);
+
+    cursor: pointer;
+
+    transition: transform .25s ease,
+                box-shadow .25s ease,
+                border-color .25s ease;
+}
+
+.book-card:hover{
+    transform: translateY(-4px);
+    border-color: var(--accent-hover);
+    box-shadow: 0 12px 24px rgba(0,0,0,.12);
+}
