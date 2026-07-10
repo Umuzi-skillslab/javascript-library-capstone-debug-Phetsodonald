@@ -121,7 +121,7 @@ export function loadData() {
     }
 }
 
-function exportLibraryData() {
+export function exportLibraryData() {
     try {
         const data = {
             books: [...books.values()],
@@ -136,7 +136,7 @@ function exportLibraryData() {
     }
 }
 
-function importLibraryData(jsonString) {
+export function importLibraryData(jsonString) {
     try {
         const data = JSON.parse(jsonString);
 
