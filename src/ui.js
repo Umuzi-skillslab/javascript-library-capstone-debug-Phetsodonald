@@ -19,12 +19,10 @@ let catalogueContainer,
 
 
 export function initializeUI() {
-
     cacheDom();
     validateDom();
     setupEventListeners();
     renderBookCatalogue([...books.values()]);
-  
 }
 
 function setupEventListeners() {
@@ -52,7 +50,7 @@ function setupEventListeners() {
     })
 }
 
-function renderBookCatalogue(bookList) {
+export function renderBookCatalogue(bookList) {
     // Clear existing content
     catalogueContainer.innerHTML = "";
 
@@ -76,6 +74,7 @@ function renderBookCatalogue(bookList) {
 
         // Book selection event
         bookCard.addEventListener("click", (event) => {
+            event.preventDefault();
             handleBookClick(event)
         })
         fragment.appendChild(bookCard);
@@ -143,7 +142,7 @@ function handleBorrowSubmit(event) {
     }
 }
 
-function handleBookClick(event) {
+export function handleBookClick(event) {
     // Find the nearest book card that was clicked
     const bookElement = event.target.closest(".book-card");
 

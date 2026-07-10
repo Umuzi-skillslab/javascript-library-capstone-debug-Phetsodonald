@@ -5,7 +5,7 @@ import {
     saveToLocalStorage
 } from "./storage.js";
 
-function startApp() {
+export function startApp() {
     try {
         let loaded = loadFromLocalStorage();
 
