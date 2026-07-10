@@ -1,5 +1,6 @@
-import {borrowBook, findBookByISBN, searchBooksByCategory} from './utils.js';
-import { books, members } from "./storage.js";
+import {borrowBook, findBookByISBN, searchBooksByCategory, addMultipleMembers} from './utils.js';
+import { books, members, saveToLocalStorage } from "./storage.js";
+import {Member} from "./library.js";
 
 let catalogueContainer, 
     controls, 
@@ -129,8 +130,11 @@ function handleBorrowSubmit(event) {
         const success = borrowBook(memberId, isbn);
 
         if (success) {
+            saveToLocalStorage();
+            updateStatisticsDisplay();
+            console.log(findBookByISBN(isbn));
             alert("Book borrowed successfully.");
-
+            
             // Reset the form
             event.target.reset();
         } else {
@@ -142,7 +146,7 @@ function handleBorrowSubmit(event) {
     }
 }
 
-export function handleBookClick(event) {
+function handleBookClick(event) {
     // Find the nearest book card that was clicked
     const bookElement = event.target.closest(".book-card");
 
@@ -250,14 +254,15 @@ function updateStatisticsDisplay() {
         availableBooksEl.textContent = availableBooks;
     }
 
-    const borrowedBooksEl = document.querySelector(".borrowed-books");
-    if (borrowedBooksEl) {
+    const borrowedBooksEl = document.querySelector(".books-borrowed");
+    if(borrowedBooksEl){
         const borrowedBooks = [...books.values()]
             .filter(book => book.availableCopies < book.totalCopies).length;
         borrowedBooksEl.textContent = borrowedBooks;
     }
-}
 
+    
+}        
 function createMemberForm() {
 
     if (!formContainer) {
@@ -295,12 +300,12 @@ function createMemberForm() {
 
     // Member ID
     const memberIdLabel = document.createElement("label");
-    memberIdLabel.setAttribute("for", "member-id");
+    memberIdLabel.setAttribute("for", "new-member-id");
     memberIdLabel.textContent = "Member ID";
 
     const memberIdInput = document.createElement("input");
     memberIdInput.type = "text";
-    memberIdInput.id = "member-id";
+    memberIdInput.id = "new-member-id";
     memberIdInput.name = "memberId";
     memberIdInput.placeholder = "Enter member ID";
     memberIdInput.required = true;
@@ -340,45 +345,42 @@ function createMemberForm() {
     );
     form.addEventListener("submit", handleCreateMember);
     formContainer.appendChild(form);
+    
 }
 
-function displayCatalogue(){
-    bookDetails.style.display = 'none';
-    memberSection.style.display = 'none';
-    borrowSection.style.display = 'none';
-    statisticsSection.style.display = 'none';
-    catalogueContainer.style.display = 'grid';
-    controls.style.display = 'block';
-    
-};
-
-function displayBorrow(){
-    bookDetails.style.display = 'none';
-    catalogueContainer.style.display = 'none';
-    controls.style.display = 'none';
-    memberSection.style.display = 'none';
-    statisticsSection.style.display = 'none';
-    borrowSection.style.display = 'block'
+function hideAllSections() {
+    bookDetails.style.display = "none";
+    catalogueContainer.style.display = "none";
+    controls.style.display = "none";
+    borrowSection.style.display = "none";
+    memberSection.style.display = "none";
+    statisticsSection.style.display = "none";
 }
 
-function displayMembers(){
-    bookDetails.style.display = 'none';
-    catalogueContainer.style.display = 'none';
-    controls.style.display = 'none';
-    borrowSection.style.display = 'none';
-    statisticsSection.style.display = 'none';
-    memberSection.style.display = 'block';
-    
+function displayCatalogue() {
+    hideAllSections();
+
+    catalogueContainer.style.display = "grid";
+    controls.style.display = "block";
+}
+
+function displayBorrow() {
+    hideAllSections();
+
+    borrowSection.style.display = "block";
+}
+
+function displayMembers() {
+    hideAllSections();
+
+    memberSection.style.display = "block";
     renderMembers(members);
 }
 
-function displayStatistics(){
-    bookDetails.style.display = 'none';
-    catalogueContainer.style.display = 'none';
-    controls.style.display = 'none';
-    borrowSection.style.display = 'none';
-    memberSection.style.display = 'none';
-    statisticsSection.style.display = 'block';
+function displayStatistics() {
+    hideAllSections();
+
+    statisticsSection.style.display = "block";
     updateStatisticsDisplay();
 }
 
@@ -397,9 +399,40 @@ function displayAddMemberForm() {
     }
 }
 
-function handleCreateMember(event){
-    event.preventDefault()
+export function handleCreateMember(event) {
+    event.preventDefault();
+
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const id = document.getElementById("new-member-id").value.trim();
+    const membershipType = document.getElementById("membership-type").value;
+
+    if (!name || !email || !id || !membershipType) {
+        alert("Please fill in all fields.");
+        return;
+    }
     
+
+    try {
+        const member = new Member(
+            id,
+            name,
+            email,
+            membershipType
+        );
+
+
+        const success = addMultipleMembers(member);
+        saveToLocalStorage();
+        
+        alert("Member added successfully.");
+        event.target.reset();
+
+        renderMembers(members);
+
+    } catch(error) {
+        console.error(error.message);
+    }
 }
 
 function cacheDom(){
