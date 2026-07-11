@@ -8,7 +8,7 @@ const ERROR_MESSAGES = {
     invalidId: id => `Member with ID: ${id} not found.`,
     invalidIsbn: isbn => `Book with ISBN: ${isbn} not found.`,
     invalidArray: value => `${value} must be an array.`,
-    invalidObject: "Expected an object.",
+    invalidObject: `Expected an object.`,
     idDuplicateError: id => `Member with ID ${id} already exists.`,
     isbnDuplicateError: isbn => `Book with ISBN ${isbn} already exists.`
 };
