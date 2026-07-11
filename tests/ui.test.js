@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import { jest } from "@jest/globals";
 import { startApp } from "../src/main.js";
+import { findBookByISBN } from "../src/utils.js";
 
 describe("Application Startup", () => {
 
@@ -226,11 +227,45 @@ describe("Application Startup", () => {
         expect(document.getElementById("email"))
             .not.toBeNull();
 
-        expect(document.getElementById("member-id"))
+        expect(document.getElementById("new-member-id"))
             .not.toBeNull();
 
         expect(document.getElementById("membership-type"))
             .not.toBeNull();
     });
 
+    test("should return a borrowed book successfully", () => {
+        // Borrow the book first
+        document.getElementById("borrow-member-id").value = "member001";
+        document.getElementById("borrow-isbn").value = "978-0-123456-001";
+
+        document.getElementById("borrow-form").dispatchEvent(
+            new Event("submit", { bubbles: true, cancelable: true })
+        );
+
+        // Return the same book
+        document.getElementById("return-member-id").value = "member001";
+        document.getElementById("return-isbn").value = "978-0-123456-001";
+
+        document.getElementById("return-form").dispatchEvent(
+            new Event("submit", { bubbles: true, cancelable: true })
+        );
+
+        const book = findBookByISBN("978-0-123456-001");
+
+        expect(book.availableCopies).toBe(book.totalCopies);
+    });
+    
+    test("should not return a book with invalid member", () => {
+        document.getElementById("return-member-id").value = "invalid-member";
+        document.getElementById("return-isbn").value = "978-0-123456-001";
+
+        document.getElementById("return-form").dispatchEvent(
+            new Event("submit", { bubbles: true, cancelable: true })
+        );
+
+        const book = findBookByISBN("978-0-123456-001");
+
+        expect(book.availableCopies).toBe(book.totalCopies);
+    });
 });

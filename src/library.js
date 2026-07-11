@@ -39,6 +39,21 @@ class Book {
         this.checkedOut.push({ memberId, borrowDate: new Date() });
         return true;
     }
+
+    returnBook(memberId) {
+        const index = this.checkedOut.findIndex(
+            record => record.memberId === memberId
+        );
+
+        if (index === -1) {
+            return false;
+        }
+
+        this.checkedOut.splice(index, 1);
+        this.availableCopies++;
+
+        return true;
+    }
 }
 
 

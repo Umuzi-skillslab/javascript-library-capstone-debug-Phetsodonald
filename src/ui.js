@@ -1,4 +1,4 @@
-import {borrowBook, findBookByISBN, searchBooksByCategory, addMultipleMembers} from './utils.js';
+import {borrowBook, returnBook, findBookByISBN, searchBooksByCategory, addMultipleMembers} from './utils.js';
 import { books, members, saveToLocalStorage } from "./storage.js";
 import {Member} from "./library.js";
 
@@ -8,14 +8,16 @@ let catalogueContainer,
     membersList, 
     createMemberToggle, 
     formContainer, 
-    borrowBookBtn, 
+    borrowBookBtn,
     membersTab, 
     statisticsSection, 
-    borrowSection, 
+    borrowSection,
+    returnSection,
     memberSection, 
     searchInput, 
     filterDropdown, 
-    bookDetails, 
+    bookDetails,
+    returnBookBtn, 
     catalogueTab;
 
 
@@ -31,6 +33,7 @@ function setupEventListeners() {
     searchInput.addEventListener("input", handleSearch);
     catalogueTab.addEventListener("click", displayCatalogue);
     borrowBookBtn.addEventListener("click", displayBorrow);
+    returnBookBtn.addEventListener("click", displayReturn);
     createMemberToggle.addEventListener("click", displayAddMemberForm)
     statisticsTab.addEventListener("click", displayStatistics);
     membersTab.addEventListener("click", displayMembers);
@@ -41,6 +44,14 @@ function setupEventListeners() {
         borrowForm.addEventListener("submit", (event) => {
             event.preventDefault();
             handleBorrowSubmit(event);
+        });
+    }
+
+    const returnForm = document.getElementById("return-form");
+    if (returnForm) {
+        returnForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            handleReturnSubmit(event);
         });
     }
     
@@ -110,12 +121,47 @@ function renderMembers(memberList){
     membersList.append(fragment);
 }
 
+function handleReturnSubmit(event) {
+    event.preventDefault();
+
+    const memberIdInput = document.getElementById("return-member-id");
+    const isbnInput = document.getElementById("return-isbn");
+
+    const memberId = memberIdInput.value.trim();
+    const isbn = isbnInput.value.trim();
+
+    if (!memberId || !isbn) {
+        alert("Please enter both Member ID and ISBN.");
+        return;
+    }
+
+    try {
+        const success = returnBook(memberId, isbn);
+
+        if (success) {
+            saveToLocalStorage();
+
+            alert("Book returned successfully.");
+
+            event.target.reset();
+
+            renderBookCatalogue([...books.values()]);
+            updateStatisticsDisplay();
+        } else {
+            alert("Unable to return the book. Please check the Member ID and ISBN.");
+        }
+    } catch (error) {
+        console.error("Return operation failed:", error);
+        alert("An unexpected error occurred. Please try again later.");
+    }
+}
+
 function handleBorrowSubmit(event) {
     // Prevent page refresh
     event.preventDefault();
 
-    const memberIdInput = document.getElementById("member-id");
-    const isbnInput = document.getElementById("isbn");
+    const memberIdInput = document.getElementById("borrow-member-id");
+    const isbnInput = document.getElementById("borrow-isbn");
 
     const memberId = memberIdInput.value.trim();
     const isbn = isbnInput.value.trim();
@@ -130,9 +176,10 @@ function handleBorrowSubmit(event) {
         const success = borrowBook(memberId, isbn);
 
         if (success) {
-            saveToLocalStorage();
             updateStatisticsDisplay();
-            console.log(findBookByISBN(isbn));
+            renderBookCatalogue([...books.values()]);
+            saveToLocalStorage();
+
             alert("Book borrowed successfully.");
             
             // Reset the form
@@ -163,9 +210,8 @@ function handleBookClick(event) {
         console.error("Book ISBN not found.");
         return;
     }
+    hideAllSections();
     bookDetails.style.display = 'block';
-    catalogueContainer.style.display = 'none';
-    controls.style.display = 'none';
     displayBookDetails(bookISBN);
 }
 
@@ -353,6 +399,7 @@ function hideAllSections() {
     catalogueContainer.style.display = "none";
     controls.style.display = "none";
     borrowSection.style.display = "none";
+    returnSection.style.display = "none";
     memberSection.style.display = "none";
     statisticsSection.style.display = "none";
 }
@@ -368,6 +415,12 @@ function displayBorrow() {
     hideAllSections();
 
     borrowSection.style.display = "block";
+}
+
+function displayReturn(){
+    hideAllSections();
+
+    returnSection.style.display = "block";
 }
 
 function displayMembers() {
@@ -422,7 +475,7 @@ export function handleCreateMember(event) {
         );
 
 
-        const success = addMultipleMembers(member);
+        addMultipleMembers(member);
         saveToLocalStorage();
         
         alert("Member added successfully.");
@@ -439,6 +492,7 @@ function cacheDom(){
     catalogueContainer = document.querySelector("#catalogue-list");
     membersList = document.querySelector("#member-list");
     borrowSection = document.querySelector("#borrow-section");
+    returnSection = document.querySelector("#return-section");
     memberSection = document.querySelector("#member-section");
     statisticsSection = document.querySelector("#statistics-section");
     controls = document.querySelector(".controls");
@@ -447,6 +501,7 @@ function cacheDom(){
     membersTab = document.querySelector("#members-tab");
     statisticsTab = document.querySelector("#statistics-tab");
     borrowBookBtn = document.querySelector("#borrow-book");
+    returnBookBtn = document.querySelector("#return-book")
     searchInput = document.getElementById("search");
     filterDropdown = document.querySelector("#filter-category");
     createMemberToggle = document.querySelector("#create-member");
@@ -469,7 +524,8 @@ function validateDom(){
         || !statisticsTab
         || !borrowBookBtn
         || !membersList
-        || !createMemberToggle) {
+        || !createMemberToggle
+        || !returnSection) {
         throw new Error("Required DOM elements not found.");
     }
 }

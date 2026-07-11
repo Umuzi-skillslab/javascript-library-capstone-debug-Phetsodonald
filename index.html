@@ -13,6 +13,7 @@
             <nav>
                 <button id="catalogue-tab">Catalogue</button>
                 <button id="borrow-book">Borrow</button>
+                <button id="return-book">Return</button>
                 <button id="members-tab">Members</button>
                 <button id="statistics-tab">Statistics</button>
             </nav>
@@ -42,11 +43,22 @@
             
             <section id="borrow-section">
                 <h2>Borrow a Book</h2>
+                <hr>
                 <form id="borrow-form">
-                    <input type="text" id="member-id" placeholder="Member ID" required>
-                    <input type="text" id="isbn" placeholder="ISBN" required>
+                    <input type="text" id="borrow-member-id" placeholder="Member ID" required>
+                    <input type="text" id="borrow-isbn" placeholder="ISBN" required>
                     <button type="submit">Borrow Book</button>
-                </form>
+                </form>     
+            </section>
+
+            <section id="return-section">
+                <h2>Return a Book</h2>
+                <hr>
+                <form id="return-form">
+                    <input type="text" id="return-member-id" placeholder="Member ID" required>
+                    <input type="text" id="return-isbn" placeholder="ISBN" required>
+                    <button type="submit">Return Book</button>
+                </form> 
             </section>
             
             <section id="member-section">

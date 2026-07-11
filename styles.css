@@ -74,6 +74,7 @@ main{
 
 #book-details,
 #borrow-section,
+#return-section,
 #member-section,
 #statistics-section{
     display: none;
@@ -192,7 +193,8 @@ main{
     font-weight: 600;
 }
 
-#borrow-section{
+#borrow-section,
+#return-section{
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
@@ -206,7 +208,8 @@ main{
 }
 
 
-#borrow-section h2{
+#borrow-section h2,
+#return-section h2{
     color: var(--accent-hover);
     font-size: 1.5rem;
     margin-bottom: 1.5rem;
@@ -214,16 +217,18 @@ main{
 
 
 /* Form layout */
-#borrow-form{
+#borrow-form,
+#return-form{
     display: flex;
     flex-direction: column;
     gap: 1rem;
-
+    margin: 15px;
 }
 
 
 /* Inputs */
-#borrow-form input{
+#borrow-form input,
+#return-form input{
     width: 100%;
     padding: .9rem 1rem;
     border: 1px solid var(--border);
@@ -236,12 +241,14 @@ main{
 }
 
 
-#borrow-form input::placeholder{
+#borrow-form input::placeholder,
+#return-form input::placeholder{
     color: var(--text-light);
 }
 
 
-#borrow-form input:focus{
+#borrow-form input:focus,
+#return-form input:focus{
     outline: none;
     border-color: var(--accent-hover);
     box-shadow: var(--shadow);
@@ -249,7 +256,8 @@ main{
 
 
 /* Button */
-#borrow-form button{
+#borrow-form button,
+#return-form button{
     padding: .9rem 1.2rem;
     border: none;
     border-radius: 10px;
@@ -262,7 +270,8 @@ main{
 }
 
 
-#borrow-form button:hover{
+#borrow-form button:hover,
+#return-form button:hover{
     background: var(--accent);
     transform: translateY(-2px);
 }

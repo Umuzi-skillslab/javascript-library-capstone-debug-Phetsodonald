@@ -214,6 +214,36 @@ function borrowBook(memberId, isbn) {
 
 }
 
+// Returns a book from a member
+function returnBook(memberId, isbn) {
+    try {
+        verifyString(memberId, isbn);
+
+        const member = findMemberById(memberId);
+        const book = findBookByISBN(isbn);
+
+        // Check the member actually borrowed this book
+        if (!member.borrowedBooks.includes(isbn)) {
+            return false;
+        }
+
+        // Return the book
+        if (!book.returnBook(memberId)) {
+            return false;
+        }
+
+        // Remove the book from the member's borrowed books
+        member.borrowedBooks = member.borrowedBooks.filter(
+            borrowedISBN => borrowedISBN !== isbn
+        );
+
+        return true;
+    } catch (error) {
+        console.error(error.message);
+        return false;
+    }
+}
+
 // Finds a member by ID and throws an error if not found
 function findMemberById(id) {
     verifyString(id);
@@ -251,6 +281,7 @@ export {
     verifyObject,
     verifyString,
     borrowBook,
+    returnBook,
     updateMemberInfo,
     calculateFineAmount,
     calculateTotalLateFees,
