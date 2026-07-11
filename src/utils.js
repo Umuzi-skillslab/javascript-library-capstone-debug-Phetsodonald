@@ -249,6 +249,7 @@ function findMemberById(id) {
     verifyString(id);
 
     const member = members.find(member => member.id === id);
+    console.log(member.constructor.name);
 
     if (!member) {
         throw new Error(ERROR_MESSAGES.invalidId(id));

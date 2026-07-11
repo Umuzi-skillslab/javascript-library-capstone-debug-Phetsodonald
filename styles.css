@@ -73,6 +73,7 @@ main{
 }
 
 #book-details,
+#member-details,
 #borrow-section,
 #return-section,
 #member-section,
@@ -155,7 +156,7 @@ main{
     color: var(--text);
 }
 
-.book-details{
+.book-details, .member-details{
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
@@ -165,7 +166,7 @@ main{
     margin-top: 2rem;
 }
 
-.book-details h2{
+.book-details h2, .member-details h2{
     color: var(--text);
     font-size: 1.8rem;
     margin-bottom: 1.5rem;
@@ -173,7 +174,7 @@ main{
     padding-bottom: .75rem;
 }
 
-.book-details p{
+.book-details p, .member-details p{
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -184,11 +185,11 @@ main{
     border-bottom: 1px solid var(--border);
 }
 
-.book-details p:last-child{
+.book-details p:last-child, .member-details p:last-child{
     border-bottom: none;
 }
 
-.book-details strong{
+.book-details strong, .member-details strong{
     color: var(--text-light);
     font-weight: 600;
 }

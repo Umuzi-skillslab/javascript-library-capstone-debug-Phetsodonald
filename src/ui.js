@@ -1,6 +1,6 @@
-import {borrowBook, returnBook, findBookByISBN, searchBooksByCategory, addMultipleMembers} from './utils.js';
+import {borrowBook, returnBook, findBookByISBN, searchBooksByCategory, addMultipleMembers, findMemberById} from './utils.js';
 import { books, members, saveToLocalStorage } from "./storage.js";
-import {Member} from "./library.js";
+import {Member, PremiumMember} from "./library.js";
 
 let catalogueContainer, 
     controls, 
@@ -17,6 +17,7 @@ let catalogueContainer,
     searchInput, 
     filterDropdown, 
     bookDetails,
+    memberDetails,
     returnBookBtn, 
     catalogueTab;
 
@@ -115,9 +116,13 @@ function renderMembers(memberList){
             <p><strong>email:</strong> ${member.email}</p>
             <p><strong>membershipType:</strong> ${member.membershipType}</p>
         `;
-
+        memberCard.addEventListener("click", (event) => {
+            event.preventDefault();
+            handleMemberClick(event);
+        })
         fragment.appendChild(memberCard);
     });
+
     membersList.append(fragment);
 }
 
@@ -202,10 +207,10 @@ function handleBookClick(event) {
         return;
     }
 
-    // Get the book ID from the data attribute
+    // Get the book ISBN from the data attribute
     const bookISBN = bookElement.dataset.bookISBN;
 
-    // Validate the ID
+    // Validate the ISBN
     if (!bookISBN) {
         console.error("Book ISBN not found.");
         return;
@@ -213,6 +218,28 @@ function handleBookClick(event) {
     hideAllSections();
     bookDetails.style.display = 'block';
     displayBookDetails(bookISBN);
+}
+
+function handleMemberClick(event) {
+    // Find the nearest member card that was clicked
+    const bookElement = event.target.closest(".member-card");
+
+    // Ignore clicks outside of a member card
+    if (!bookElement) {
+        return;
+    }
+
+    // Get the member ID from the data attribute
+    const memberId = bookElement.dataset.memberId;
+
+    // Validate the ID
+    if (!memberId) {
+        console.error("member ID not found.");
+        return;
+    }
+    hideAllSections();
+    memberDetails.style.display = 'block';
+    displayMemberDetails(memberId);
 }
 
 function handleSearch(event) {
@@ -274,6 +301,44 @@ function displayBookDetails(isbn) {
             <p><strong>Year:</strong> ${book.year}</p>
             <p><strong>Category:</strong> ${book.category}</p>
             <p><strong>Available Copies:</strong> ${book.availableCopies}</p>
+        </div>
+    `;
+
+    return true;
+}
+
+function displayMemberDetails(id) {
+    const member = findMemberById(id);
+
+    if (!member) {
+        console.error("Member not found.");
+        return false;
+    }
+
+    const detailsContainer = document.getElementById("member-details");
+
+    if (!detailsContainer) {
+        console.error("Member details container not found.");
+        return false;
+    }
+
+    let memberBorrowedBooks;
+
+    if(member.borrowedBooks.length === 0){
+        memberBorrowedBooks = `None`;
+    }else{
+        const book = member.borrowedBooks.map(book => `<li>${book}</li>`).join("");
+        memberBorrowedBooks = `<ul>${book}</ul>`
+    }
+
+    detailsContainer.innerHTML = `
+        <div class="member-details">
+            <h2>${member.name}</h2>
+            <p><strong>email:</strong> ${member.email}</p>
+            <p><strong>ID:</strong> ${member.id}</p>
+            <p><strong>JoinDate:</strong> ${member.joinDate}</p>
+            <p><strong>MembershipType:</strong> ${member.membershipType}</p>
+            <p><strong>BorrowedBooks:</strong>${memberBorrowedBooks}</p>
         </div>
     `;
 
@@ -396,6 +461,7 @@ function createMemberForm() {
 
 function hideAllSections() {
     bookDetails.style.display = "none";
+    memberDetails.style.display = 'none';
     catalogueContainer.style.display = "none";
     controls.style.display = "none";
     borrowSection.style.display = "none";
@@ -467,13 +533,13 @@ export function handleCreateMember(event) {
     
 
     try {
-        const member = new Member(
-            id,
-            name,
-            email,
-            membershipType
-        );
-
+        let member;
+        if (membershipType === "premium") {
+            member = new PremiumMember(id, name, email);
+        } else {
+            member = new Member(id, name, email);
+        }
+        consol.log(member.constructor.name);
 
         addMultipleMembers(member);
         saveToLocalStorage();
@@ -497,6 +563,7 @@ function cacheDom(){
     statisticsSection = document.querySelector("#statistics-section");
     controls = document.querySelector(".controls");
     bookDetails = document.querySelector("#book-details");
+    memberDetails = document.querySelector("#member-details");
     catalogueTab = document.querySelector("#catalogue-tab");
     membersTab = document.querySelector("#members-tab");
     statisticsTab = document.querySelector("#statistics-tab");
@@ -525,7 +592,8 @@ function validateDom(){
         || !borrowBookBtn
         || !membersList
         || !createMemberToggle
-        || !returnSection) {
+        || !returnSection
+        || !memberDetails) {
         throw new Error("Required DOM elements not found.");
     }
 }

@@ -117,7 +117,7 @@ class PremiumMember extends Member {
         verifyString(id, name, email);
 
         super(id, name, email, "premium");
-        this.maxBooks = 15;
+        this.maxBooks = 10;
     }
 
     canBorrow() {
