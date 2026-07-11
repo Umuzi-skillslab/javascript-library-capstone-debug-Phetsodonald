@@ -1,4 +1,4 @@
-import { Book, Member } from "./library.js";
+import { Book, Member, PremiumMember } from "./library.js";
 import data from "./data.json" with {type: "json"};
 
 export const books = new Map();
@@ -59,17 +59,7 @@ export function loadFromLocalStorage() {
         members.length = 0;
 
         for (const memberData of parsedMembers) {
-            const member = new Member(
-                memberData.id,
-                memberData.name,
-                memberData.email,
-                memberData.membershipType
-            );
-
-            member.borrowedBooks = memberData.borrowedBooks || [];
-            member.fines = memberData.fines || 0;
-
-            members.push(member);
+            members.push(membershipType(memberData));
         }
 
         return true;
@@ -102,15 +92,7 @@ export function loadData() {
 
 
         data.members.forEach(memberData => {
-
-            const member = new Member(
-                memberData.id,
-                memberData.name,
-                memberData.email,
-                memberData.membershipType
-            );
-
-            members.push(member);
+            members.push(membershipType(memberData));
         });
 
         return true;
@@ -169,23 +151,35 @@ export function importLibraryData(jsonString) {
         members.length = 0;
 
         for (const memberData of data.members) {
-            const member = new Member(
-                memberData.id,
-                memberData.name,
-                memberData.email,
-                memberData.membershipType
-            );
-
-            member.borrowedBooks = memberData.borrowedBooks || [];
-            member.fines = memberData.fines || 0;
-
-            members.push(member);
+            members.push(membershipType(memberData));
         }
-
         console.log("Library data imported successfully.");
         return true;
     } catch (error) {
         console.error("Failed to import library data:", error);
         return false;
     }
+}
+
+function membershipType(memberData) {
+    let member;
+
+    if (memberData.membershipType === "premium") {
+        member = new PremiumMember(
+            memberData.id,
+            memberData.name,
+            memberData.email
+        );
+    } else {
+        member = new Member(
+            memberData.id,
+            memberData.name,
+            memberData.email
+        );
+    }
+
+    member.borrowedBooks = memberData.borrowedBooks || [];
+    member.fines = memberData.fines || 0;
+
+    return member;
 }

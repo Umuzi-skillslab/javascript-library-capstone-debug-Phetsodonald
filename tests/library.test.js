@@ -64,8 +64,42 @@ describe('Book Class', () => {
     test('should check for copies availability', () => {
         const book = new Book('978-0-123', 'Ice and Fire', 'Phetso', 2020, 0, 'fiction');
         expect(book.checkAvailability()).toBe(false)
-    })
+    });
 
+    test("should return a checked out book successfully", () => {
+        const book = new Book('978-0-123', 'Ice and Fire', 'Phetso', 2020, 1, 'fiction');
+        const member = new Member('member165', 'Phetso', 'Phetso@gmail.com');
+
+        // Borrow book first
+        const checkoutResult = book.checkOut(member.id);
+
+        expect(checkoutResult).toBe(true);
+        expect(book.availableCopies).toBe(0);
+        expect(book.checkedOut.length).toBe(1);
+
+
+        // Return book
+        const result = book.returnBook(member.id);
+
+
+        expect(result).toBe(true);
+        expect(book.availableCopies).toBe(1);
+        expect(book.checkedOut.length).toBe(0);
+    });
+
+    test("should return false when member has not checked out the book", () => {
+        const book = new Book('978-0-123', 'Ice and Fire', 'Phetso', 2020, 1, 'fiction');
+        const member = new Member('member165', 'Phetso', 'Phetso@gmail.com');
+
+
+        const result = book.returnBook(member.id);
+
+
+        expect(result).toBe(false);
+
+        expect(book.availableCopies).toBe(1);
+        expect(book.checkedOut.length).toBe(0);
+    });
 
 
     // SAD TESTS
@@ -250,23 +284,25 @@ describe('PremiumMember Class', () => {
     });
 
     test('should check if premium member can borrow more books', () => {
-        const member = new PremiumMember('member', 'Phetso', 'rose@gmail.com')
+        const member = new PremiumMember('member', 'Phetso', 'rose@gmail.com');
         const book = new Book('978-0-123', 'Ice and Fire', 'Phetso', 2020, 5, 'fiction');
 
-        
-        member.borrowedBooks.push(book);
-        member.borrowedBooks.push(book);
-        member.borrowedBooks.push(book);
-        member.borrowedBooks.push(book);
-        member.borrowedBooks.push(book);
-        member.borrowedBooks.push(book);
-        member.borrowedBooks.push(book);
-        member.borrowedBooks.push(book);
-        member.borrowedBooks.push(book);
-        member.borrowedBooks.push(book);
+        for (let i = 0; i < 9; i++) {
+            member.borrowedBooks.push(book);
+        }
 
         expect(member.canBorrow()).toBe(true);
-        expect(member.borrowedBooks.length).toBe(10)
+    });
+
+    test('should not allow a premium member to borrow more than 10 books', () => {
+        const member = new PremiumMember('member', 'Phetso', 'rose@gmail.com');
+        const book = new Book('978-0-123', 'Ice and Fire', 'Phetso', 2020, 5, 'fiction');
+
+        for (let i = 0; i < 10; i++) {
+            member.borrowedBooks.push(book);
+        }
+
+        expect(member.canBorrow()).toBe(false);
     });
 
 });

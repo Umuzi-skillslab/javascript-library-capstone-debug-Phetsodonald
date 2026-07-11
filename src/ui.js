@@ -307,7 +307,7 @@ function displayBookDetails(isbn) {
     return true;
 }
 
-function displayMemberDetails(id) {
+export function displayMemberDetails(id) {
     const member = findMemberById(id);
 
     if (!member) {
@@ -470,40 +470,40 @@ function hideAllSections() {
     statisticsSection.style.display = "none";
 }
 
-function displayCatalogue() {
+export function displayCatalogue() {
     hideAllSections();
 
     catalogueContainer.style.display = "grid";
     controls.style.display = "block";
 }
 
-function displayBorrow() {
+export function displayBorrow() {
     hideAllSections();
 
     borrowSection.style.display = "block";
 }
 
-function displayReturn(){
+export function displayReturn(){
     hideAllSections();
 
     returnSection.style.display = "block";
 }
 
-function displayMembers() {
+export function displayMembers() {
     hideAllSections();
 
     memberSection.style.display = "block";
     renderMembers(members);
 }
 
-function displayStatistics() {
+export function displayStatistics() {
     hideAllSections();
 
     statisticsSection.style.display = "block";
     updateStatisticsDisplay();
 }
 
-function displayAddMemberForm() {
+export function displayAddMemberForm() {
     const formVisible = formContainer.style.display === "block";
 
     if (formVisible) {
@@ -539,7 +539,7 @@ export function handleCreateMember(event) {
         } else {
             member = new Member(id, name, email);
         }
-        consol.log(member.constructor.name);
+        console.log(member.constructor.name);
 
         addMultipleMembers(member);
         saveToLocalStorage();

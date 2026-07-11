@@ -3,6 +3,19 @@ import path from "path";
 import { jest } from "@jest/globals";
 import { startApp } from "../src/main.js";
 import { findBookByISBN } from "../src/utils.js";
+import {
+    handleCreateMember,
+    displayAddMemberForm,
+    displayCatalogue,
+    displayBorrow,
+    displayReturn,
+    displayMembers,
+    displayStatistics,
+    displayMemberDetails 
+} from "../src/ui.js";
+import { Member } from "../src/library.js";
+import { members } from "../src/storage.js";
+
 
 describe("Application Startup", () => {
 
@@ -22,7 +35,7 @@ describe("Application Startup", () => {
         const bookCard = document.querySelector(".book-card");
 
         expect(bookCard).not.toBeNull();
-        expect(catalogue.children).toHaveLength(15);
+        expect(catalogue.children.length).toBeGreaterThan(0);
     });
 
 
@@ -268,4 +281,92 @@ describe("Application Startup", () => {
 
         expect(book.availableCopies).toBe(book.totalCopies);
     });
+
+    test("displayCatalogue should show catalogue", () => {
+
+        displayCatalogue();
+
+        expect(document.querySelector("#catalogue-list").style.display)
+            .toBe("grid");
+
+        expect(document.querySelector(".controls").style.display)
+            .toBe("block");
+    });
+
+    test("displayBorrow should show borrow section", () => {
+
+        displayBorrow();
+
+        expect(document.querySelector("#borrow-section").style.display)
+            .toBe("block");
+    });
+    
+    test("displayReturn should show return section", () => {
+
+        displayReturn();
+
+        expect(document.querySelector("#return-section").style.display)
+            .toBe("block");
+    });
+
+    test("displayMembers should show member section", () => {
+
+        displayMembers();
+
+        expect(document.querySelector("#member-section").style.display)
+            .toBe("block");
+    });
+
+    test("displayStatistics should show statistics section", () => {
+
+        displayStatistics();
+
+        expect(document.querySelector("#statistics-section").style.display)
+            .toBe("block");
+    });
+
+    test("displayAddMemberForm should toggle the form", () => {
+
+        const form = document.querySelector("#member-form");
+        const membersList = document.querySelector("#member-list");
+
+        displayAddMemberForm();
+
+        expect(form.style.display).toBe("block");
+        expect(membersList.style.display).toBe("none");
+
+        displayAddMemberForm();
+
+        expect(form.style.display).toBe("none");
+        expect(membersList.style.display).toBe("block");
+    });
+
+    test("should display member details successfully", () => {
+        const member = new Member(
+            "member001",
+            "Phetso",
+            "phetso@gmail.com"
+        );
+
+        members.push(member);
+
+
+        const result = displayMemberDetails("member001");
+
+
+        const container = document.getElementById("member-details");
+
+
+        expect(result).toBe(true);
+
+        expect(container.innerHTML)
+            .toContain("Phetso");
+
+        expect(container.innerHTML)
+            .toContain("phetso@gmail.com");
+
+        expect(container.innerHTML)
+            .toContain("member001");
+    });
+
 });

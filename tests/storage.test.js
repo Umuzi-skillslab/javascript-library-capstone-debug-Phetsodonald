@@ -125,4 +125,54 @@ describe("Storage Management", () => {
         expect(result).toBe(false);
     });
 
+    test("should export books and members as arrays", () => {
+        loadData();
+
+        const result = exportLibraryData();
+
+        const parsed = JSON.parse(result);
+
+        expect(Array.isArray(parsed.books)).toBe(true);
+        expect(Array.isArray(parsed.members)).toBe(true);
+    });
+
+    test("should import valid library data", () => {
+        loadData();
+
+        const exportedData = exportLibraryData();
+
+        books.clear();
+        members.length = 0;
+
+
+        const result = importLibraryData(exportedData);
+
+
+        expect(result).toBe(true);
+
+        expect(books.size).toBeGreaterThan(0);
+        expect(members.length).toBeGreaterThan(0);
+    });
+
+    test("should reject malformed JSON during import", () => {
+        const result = importLibraryData("invalid json");
+
+        expect(result).toBe(false);
+
+        expect(books.size).toBe(0);
+        expect(members.length).toBe(0);
+    });
+
+    test("should reject imported data without required fields", () => {
+        const invalidData = JSON.stringify({
+            books: []
+        });
+
+
+        const result = importLibraryData(invalidData);
+
+
+        expect(result).toBe(false);
+    });
+
 });
