@@ -189,6 +189,76 @@ Calculates library metrics.
 Initializes and starts the application.
 
 This structure improves maintainability, testing, and scalability.
+# User Interface Overview
+
+## Catalogue Section
+
+- The catalogue is the main interface for viewing and searching books.
+
+## Borrow Section
+
+- The Borrow section allows registered members to borrow books.
+
+## Return Section
+
+- The Return section processes returned books.
+
+## Member Management Section
+
+- This section manages library members.
+
+## Statistics Section
+
+- The Statistics section provides an overview of the library.
+
+# Screenshots
+
+The following screenshots demonstrate the main features of the Digital Library Management System.
+
+## Working/Catalogue
+- Displays the books catalogue along with Browser console.
+![Catalogue](./screenshots/app-working.png)
+
+## Search Feature
+- Displays  the search feature in action.
+![search-feature](./screenshots/search-feature.png)
+
+## statistics
+- Displays the library statistics
+![statistics](./screenshots/statistics-display.png)
+
+## Coverage Report
+- Displays tests coverage report.
+![coverage-report](./screenshots/covarage-report.png)
+
+## Passing Tests
+- Displays Passing tests.
+![Passing tests](./screenshots/tests-passing.png)
+
+## Borrow Book 
+-Displays a form for a registered member to borrow a book.
+![Borrow Book](./screenshots/borrow-feature.png)
+
+## Return Book
+- Displays a form for a registered member to return a book.
+![Return Book](./screenshots/return-feature.png)
+
+## Book Details
+- Displays clicked book details.
+![Book Details](./screenshots/members-details.png)
+
+## Add member
+- Displays a form to create a member.
+![Add member](./screenshots/add-member-feature.png)
+
+## Members list
+- Displays a list of members.
+![Members list](./screenshots/members-list.png)
+
+## Member details
+- Displays a clicked member details.
+![Member details](./screenshots/members-details.png)
+
 
 # Installation and Setup
 Requirements
