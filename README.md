@@ -259,6 +259,8 @@ The following screenshots demonstrate the main features of the Digital Library M
 - Displays a clicked member details.
 ![Member details](./screenshots/members-details.png)
 
+# Reflection
+- The most challenging bugs involved Localstorage, borrowing validation, and ui updates. I used console logging to debug.
 
 # Installation and Setup
 Requirements

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1783805827611" clover="3.2.0">
-  <project timestamp="1783805827612" name="All files">
+<coverage generated="1783880634591" clover="3.2.0">
+  <project timestamp="1783880634591" name="All files">
     <metrics statements="530" coveredstatements="446" conditionals="160" coveredconditionals="113" methods="112" coveredmethods="105" elements="802" coveredelements="664" complexity="0" loc="530" ncloc="530" packages="1" files="7" classes="7"/>
     <file name="constants.js" path="/home/phetso/javascript-library-capstone-debug-Phetsodonald/src/constants.js">
       <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
