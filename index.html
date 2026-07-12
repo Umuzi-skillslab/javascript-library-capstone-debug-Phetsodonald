@@ -12,6 +12,8 @@
             <h1>Digital Library System</h1>
             <nav>
                 <button id="catalogue-tab">Catalogue</button>
+                <button id="borrow-book">Borrow</button>
+                <button id="return-book">Return</button>
                 <button id="members-tab">Members</button>
                 <button id="statistics-tab">Statistics</button>
             </nav>
@@ -27,6 +29,7 @@
                         <option value="non-fiction">Non-Fiction</option>
                         <option value="reference">Reference</option>
                     </select>
+
                 </div>
                 
                 <div id="catalogue-list" class="book-grid">
@@ -40,46 +43,67 @@
             
             <section id="borrow-section">
                 <h2>Borrow a Book</h2>
+                <hr>
                 <form id="borrow-form">
-                    <input type="text" id="member-id" placeholder="Member ID" required>
-                    <input type="text" id="isbn" placeholder="ISBN" required>
+                    <input type="text" id="borrow-member-id" placeholder="Member ID" required>
+                    <input type="text" id="borrow-isbn" placeholder="ISBN" required>
                     <button type="submit">Borrow Book</button>
-                </form>
+                </form>     
+            </section>
+
+            <section id="return-section">
+                <h2>Return a Book</h2>
+                <hr>
+                <form id="return-form">
+                    <input type="text" id="return-member-id" placeholder="Member ID" required>
+                    <input type="text" id="return-isbn" placeholder="ISBN" required>
+                    <button type="submit">Return Book</button>
+                </form> 
             </section>
             
-            <section id="member-section" style="display: none;">
+            <section id="member-section">
                 <h2>Member Management</h2>
+
+                <hr>
+
+                <button id="create-member">Create A Member</button>
+
                 <div id="member-form">
                     <!-- Member form rendered here -->
                 </div>
+
                 <div id="member-list">
                     <!-- Members list -->
                 </div>
+
             </section>
+
             
-            <section id="statistics-section" style="display: none;">
+                <div id="member-details">
+                    <!-- Member details -->
+                     
+                </div>
+            
+            <section id="statistics-section" >
                 <h2>Library Statistics</h2>
                 <div class="stats-grid">
                     <div class="stat-card">
                         <h3>Total Books</h3>
-                        <p class="total-books">0</p>
+                        <p class="total-books"></p>
                     </div>
                     <div class="stat-card">
                         <h3>Total Members</h3>
-                        <p class="total-members">0</p>
+                        <p class="total-members"></p>
                     </div>
                     <div class="stat-card">
                         <h3>Books Borrowed</h3>
-                        <p class="books-borrowed">0</p>
+                        <p class="books-borrowed"></p>
                     </div>
                 </div>
             </section>
         </main>
     </div>
     
-    <!-- Scripts in wrong order -->
-    <script src="ui.js"></script>
-    <script src="library.js"></script>
-    <!-- Missing: modules setup -->
+    <script type="module" src="./src/main.js"></script>
 </body>
 </html>
